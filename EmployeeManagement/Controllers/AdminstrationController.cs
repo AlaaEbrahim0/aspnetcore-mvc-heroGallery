@@ -60,33 +60,7 @@ namespace EmployeeManagement.Controllers
 			return View(roles);
 		}
 
-		[HttpGet]
-		public async Task<IActionResult> EditRole(string id)
-		{
-			var role = await roleManager.FindByIdAsync(id);
-
-			if (role == null)
-			{
-				ViewBag.ErrorMessage = $"Role with ID = {id} cannot be found";
-				return View("StatusCodeError");
-			}
-
-
-			var model = new EditRoleViewModel
-			{
-				Id = role.Id,
-				RoleName = role.Name
-			};
-
-			foreach (var user in await userManager.Users.ToListAsync())
-			{
-				if (await userManager.IsInRoleAsync(user, role.Name))
-				{
-					model.Users.Add(user.UserName);
-				}
-			}
-			return View(model);
-		}
+		
 
 		
 	}
