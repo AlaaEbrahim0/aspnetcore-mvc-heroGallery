@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 namespace EmployeeManagement.Controllers
 {
@@ -60,6 +61,60 @@ namespace EmployeeManagement.Controllers
 			return View(roles);
 		}
 
+		[HttpGet]
+		public async Task<IActionResult> EditRole(string id)
+		{
+			var role = await roleManager.FindByIdAsync(id);
+			if (role == null)
+			{
+				ViewBag.ErrorMessage = $"Role with ID = {id} cannot be found";
+				return View("StatusCodeError");
+			}
+
+			var model = new EditRoleViewModel
+			{
+				Id = id,
+				RoleName = role.Name,
+			};
+
+			foreach(var user in await userManager.Users.ToListAsync())
+			{
+				if (await userManager.IsInRoleAsync(user, role.Name))
+				{
+					model.Users.Add(user.UserName);
+				}
+			}
+			return View(model);
+		}
+		[HttpPost]
+		public async Task<IActionResult> EditRoleAsync(EditRoleViewModel model)
+		{
+			if (ModelState.IsValid)
+			{
+				var role = await roleManager.FindByIdAsync(model.Id);
+
+				if (role == null)
+				{
+					ViewBag.ErrorMessage = $"Role with ID = {model.Id} cannot be found";
+					return View("StatusCodeError");
+				}
+
+				role.Name = model.RoleName;
+				var result = await roleManager.UpdateAsync(role);
+
+				if (result.Succeeded)
+				{
+					return RedirectToAction("RolesList");
+				}
+
+				foreach (var error in result.Errors)
+				{
+					ModelState.AddModelError("", error.Description);
+				}
+			}
+
+			return View(model);
+		}
 		
 
 		
