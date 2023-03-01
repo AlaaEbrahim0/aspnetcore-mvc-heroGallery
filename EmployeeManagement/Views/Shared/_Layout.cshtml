@@ -12,6 +12,10 @@
 	<script src="~/lib/jquery/jquery.min.js"></script>
 	<script src="~/lib/jquery-validate/jquery.validate.js"></script>
 	<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+	<script src="~/lib/twitter-bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script src="~/lib/twitter-bootstrap/js/bootstrap.bundle.js"></script>
+	<script src="~/lib/twitter-bootstrap/js/bootstrap.min.js"></script>
+	<script src="~/lib/twitter-bootstrap/js/bootstrap.js"></script>
   </head>
   <body>
     <div class="container">
@@ -23,7 +27,7 @@
 				<span class="navbar-toggler-icon"></span> 
             </button>
 
-			<div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
                 <ul class="navbar-nav">
                     <li class="nav-item">
                         <a asp-controller="Home" asp-action="Index" class="nav-link">List</a>
@@ -31,7 +35,28 @@
                     <li class="nav-item">
                         <a asp-controller="Home" asp-action="Create" class="nav-link">Create</a>
                     </li>
-                   
+
+                    @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                    {   
+                        <li class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" id="navbarDarkDropdownMenuLink" data-toggle="dropdown"
+                               aria-haspopup="true" aria-expanded="false" role="button">
+                                Manage
+                            </a>
+
+                            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+								<li>
+                                    <a asp-controller="Adminstration" asp-action="UsersList" class="dropdown-item">Users</a>
+                                </li>
+
+                                <li>
+                                    <a asp-controller="Adminstration" asp-action="RolesList" class="dropdown-item">Roles</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                    }
+
                 </ul>
 
 				<ul class="navbar-nav ml-auto">

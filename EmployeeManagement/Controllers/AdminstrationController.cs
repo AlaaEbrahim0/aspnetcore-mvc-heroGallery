@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 namespace EmployeeManagement.Controllers
 {
-
+	[Authorize(Roles = "Admin")]
 	public class AdminstrationController : Controller
 	{
 		private readonly RoleManager<IdentityRole> roleManager;
@@ -23,6 +23,14 @@ namespace EmployeeManagement.Controllers
 			this.roleManager = roleManager;
 			this.userManager = userManager;
 		}
+
+		[HttpGet]
+		public IActionResult UsersList()
+		{
+			var users = userManager.Users;
+			return View(users);
+		}
+
 
 		[HttpGet]
 		public IActionResult CreateRole()
@@ -184,26 +192,11 @@ namespace EmployeeManagement.Controllers
 					continue;
 				}
 
-				if (result.Succeeded)
-				{
-					if (i < (model.Count - 1))
-					{
-						continue;
-					}
-
-					else
-					{
-						return RedirectToAction("EditRole", new { id = roleId });
-					}
-				}
-
 			}
-
+			
 			return RedirectToAction("EditRole", new { id = roleId });
-
-
+			
 		}
-
 
 
 	}
