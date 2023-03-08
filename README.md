@@ -25,8 +25,9 @@ Build and run the project
 
 *   User registration and authentication
 *   CRUD operations for employees
-*   Employee search functionality
 *   Displaying employee data in a list format with profile pictures
+*   Custom Error Pages
+*   
 
 ## Technologies Used
 
