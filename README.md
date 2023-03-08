@@ -27,7 +27,6 @@ Build and run the project
 *   CRUD operations for employees
 *   Displaying employee data in a list format with profile pictures
 *   Custom Error Pages
-*   
 
 ## Technologies Used
 
