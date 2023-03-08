@@ -25,8 +25,21 @@
             </div>
 
 			<div class="card-footer">
-                <a class="btn btn-primary" style="width:auto" asp-route-id="@role.Id" asp-action="EditRole" asp-controller="Adminstration">Edit</a>
-                <a class="btn btn-danger" style="width:auto" asp-route-id="@role.Id" asp-action="DeleteRole" asp-controller="Adminstration">Delete</a>
+                <form method="post" asp-action="DeleteRole" asp-controller="adminstration" asp-route-id="@role.Id">
+                    <a asp-controller="adminstration" asp-action="EditRole" asp-route-id="@role.Id" class="btn btn-danger">Edit</a>
+
+
+                    <span id="confirmDeleteSpan_@role.Id" style="display:none">
+
+                        <span>Are you sure you want to delete?</span>
+                        <button type="submit" class="btn btn-danger">Yes</button>
+                        <a href="#" class="btn btn-primary" onclick="confirmDelete('@role.Id', false)">No</a>
+                    </span>
+
+                    <span id="deleteSpan_@role.Id">
+                        <a href="#" class="btn btn-danger" onclick="confirmDelete('@role.Id', true)">Delete</a>
+                    </span>
+                </form>
             </div>
 
         </div>  
@@ -45,4 +58,8 @@ else
 		    <a class="btn btn-primary" style="width:auto" asp-action="CreateRole" asp-controller="Adminstration">Create Role</a>
         </div>
     </div>    
+}
+
+@section Scripts{
+    <script src="~/js/customscript.js"></script>
 }
