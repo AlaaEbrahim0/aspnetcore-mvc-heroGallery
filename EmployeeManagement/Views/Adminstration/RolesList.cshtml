@@ -25,21 +25,31 @@
             </div>
 
 			<div class="card-footer">
-                <form method="post" asp-action="DeleteRole" asp-controller="adminstration" asp-route-id="@role.Id">
-                    <a asp-controller="adminstration" asp-action="EditRole" asp-route-id="@role.Id" class="btn btn-danger">Edit</a>
+                <a asp-controller="adminstration" asp-action="EditRole" asp-route-id="@role.Id" class="btn btn-primary">Edit</a>
+                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-modal-@role.Id">Delete</button>
 
+            </div>
 
-                    <span id="confirmDeleteSpan_@role.Id" style="display:none">
-
-                        <span>Are you sure you want to delete?</span>
-                        <button type="submit" class="btn btn-danger">Yes</button>
-                        <a href="#" class="btn btn-primary" onclick="confirmDelete('@role.Id', false)">No</a>
-                    </span>
-
-                    <span id="deleteSpan_@role.Id">
-                        <a href="#" class="btn btn-danger" onclick="confirmDelete('@role.Id', true)">Delete</a>
-                    </span>
-                </form>
+            <div class="modal fade" id="delete-modal-@role.Id">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5>Delete Confirmation</h5>
+                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" data-bs-target="#modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to delete role:
+                            <br>
+							<span class="font-weight-bold">@role.Id</span>
+                        </div>
+                        <div class="modal-footer">
+                            <form method="post" asp-action="DeleteRole" asp-controller="adminstration" asp-route-id="@role.Id">
+								<button type="submit" class="btn btn-danger" data-bs-dismiss="modal">Yes</button>
+                            </form>
+                            <button class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
         </div>  
@@ -60,6 +70,4 @@ else
     </div>    
 }
 
-@section Scripts{
-    <script src="~/js/customscript.js"></script>
-}
+
