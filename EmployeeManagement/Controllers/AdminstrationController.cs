@@ -279,6 +279,7 @@ namespace EmployeeManagement.Controllers
 
 			return View(model);
 		}
+		[HttpPost]
 
 		public async Task<IActionResult> DeleteUserAsync(string id)
 		{
@@ -300,6 +301,8 @@ namespace EmployeeManagement.Controllers
 			return View("ListUsers");
 
 		}
+		[HttpPost]
+		[Authorize(Policy = "DeleteRolePolicy")]
 
         public async Task<IActionResult> DeleteRoleAsync(string id)
         {

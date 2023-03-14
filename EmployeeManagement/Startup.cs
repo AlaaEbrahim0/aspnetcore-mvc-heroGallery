@@ -58,7 +58,7 @@ namespace EmployeeManagement
                     .AddEntityFrameworkStores<AppDbContext>();
 
 
-            services.AddAuthorization(options =>`
+            services.AddAuthorization(options =>
             {
                 options.AddPolicy("DeleteRolePolicy", policy => policy.RequireClaim("DeleteRole"));
             });
