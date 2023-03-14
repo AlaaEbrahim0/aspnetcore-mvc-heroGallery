@@ -71,8 +71,7 @@
 
 	
 	@if (Model.Claims.Any())
-	{
-		
+	{	
 			<div class="card mb-3">
 				<div class="card-header">
 					<h3 class="card-title">User Claims</h3>
@@ -84,7 +83,7 @@
 					}
 				</div>
 				<div class="card-footer">
-					<a href="#" class="btn btn-primary w-auto">Manage Claims</a>
+					<a asp-controller="adminstration" asp-action="ManageUserClaims" asp-route-userId="@Model.Id" class="btn btn-primary w-auto">Manage Claims</a>
 				</div>
 			</div>
 	}
@@ -98,7 +97,7 @@
 				None at the moment
 			</div>
 			<div class="card-footer">
-				<a href="#" class="btn btn-primary w-auto">Manage Claims</a>
+				<a asp-controller="adminstration" asp-action="ManageUserClaims" asp-route-userId="@Model.Id" class="btn btn-primary w-auto">Manage Claims</a>
 			</div>
 		</div>
 	}

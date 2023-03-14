@@ -1,0 +1,36 @@
+﻿@model UserClaimsViewModel
+
+@{
+	ViewBag.Title = "User Claims";
+}
+
+<form method="post" asp-controller="adminstration" asp-action="ManageUserClaims" asp-route-userId="@Model.UserId">
+	<div class="card">
+		<div class="card-header">
+			<h2>Manage User Claims</h2>
+		</div>
+
+		<div class="card-body">
+			@for (int i = 0; i < Model.Claims.Count; ++i)
+			{
+				<div class="form-check">
+					<input type="hidden" asp-for="@Model.Claims[i].ClaimType" />
+
+					<input class="form-check-input" asp-for="@Model.Claims[i].IsSelected">
+					<label class="form-check-label" asp-for="@Model.Claims[i].IsSelected">
+						@Model.Claims[i].ClaimType
+					</label>
+				</div>
+			}
+		</div>
+
+		<div asp-validation-summary="All"></div>
+
+		<div class="card-footer">
+			<button type="submit" class="btn btn-primary w-auto">Update</button>
+			<a asp-controller="adminstration" class="btn btn-primary w-auto" asp-action="EditUser" asp-route-userId="@Model.UserId">Cancel</a>
+		</div>
+
+	</div>
+</form>
+
