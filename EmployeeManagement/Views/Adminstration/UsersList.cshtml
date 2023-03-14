@@ -1,17 +1,32 @@
-﻿@model IEnumerable<ApplicationUser>
-
+﻿@model PaginatedViewModel
 @{
 	ViewBag.Title = "Users List";
 }
 
 <h1>Users List</h1>
 
-@if (Model.Any())
+
+@if (Model.Users.Any())
 {
 	<a class="btn btn-primary mt-3 mb-3" style="width:auto" asp-controller="Account" asp-action="Register">Add New User</a>
 
+	<nav aria-label="Page navigation example">
+		<ul class="pagination">
+			<li class="page-item @(Model.PageNumber == 1 ? "disabled" : "")"><a class="page-link"
+			   asp-controller="adminstration" asp-action="UsersList" asp-route-page="@(Model.PageNumber-1)">Previous</a>
+			</li> 
+			@for (int i = 1; i <= Model.TotalPages; ++i)
+			{
+				<li class="page-item @(Model.PageNumber == i ? "active": "" )"><a class="page-link" 
+					asp-controller="adminstration" asp-action="UsersList" asp-route-page = "@i"> @i</a></li>
+			}
+			<li class="page-item @(Model.PageNumber == Model.TotalPages ? "disabled" : "")">
+				<a class="page-link"
+			   asp-controller="adminstration" asp-action="UsersList" asp-route-page="@(Model.PageNumber+1)">Next</a>
+		</ul>
+	</nav>
 
-	@foreach(var user in Model)
+	@foreach(var user in Model.Users)
 	{
 		<div class="card mb-3">
 			<div class="card-header">

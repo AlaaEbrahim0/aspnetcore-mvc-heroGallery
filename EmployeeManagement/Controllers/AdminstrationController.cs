@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection.Metadata;
 using System.Threading.Tasks;
 using EmployeeManagement.Models;
+using EmployeeManagement.Utilites;
 using EmployeeManagement.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -29,10 +30,25 @@ namespace EmployeeManagement.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult UsersList()
+		public IActionResult UsersList(int ?page)
 		{
-			var users = userManager.Users;
-			return View(users);
+			int pageSize = 3;
+			int pageNumber = page ?? 1;
+
+			var users = userManager.Users.OrderBy(x => x.UserName).ToList();
+
+			var pagination = new Pagination<ApplicationUser>(users, pageSize);
+			var paginatedUsers = pagination.GetPage(pageNumber);
+
+			var model = new PaginatedViewModel
+			{
+				Users = paginatedUsers,
+				PageNumber = pageNumber,
+				PageSize = pageSize,
+				TotalPages = pagination.TotalPages
+			};
+
+			return View(model);
 		}
 
 
@@ -70,7 +86,7 @@ namespace EmployeeManagement.Controllers
 		[HttpGet]
 		public IActionResult RolesList()
 		{
-			var roles = roleManager.Roles;
+			var roles = roleManager.Roles.OrderBy(r => r.Name);
 			return View(roles);
 		}
 
@@ -97,6 +113,7 @@ namespace EmployeeManagement.Controllers
 					model.Users.Add(user.UserName);
 				}
 			}
+			model.Users = model.Users.OrderBy(r => r).ToList();
 			return View(model);
 		}
 		[HttpPost]
@@ -158,11 +175,11 @@ namespace EmployeeManagement.Controllers
 				{
 					userRoleViewModel.IsSelected = true;
 				}
-
 				model.Add(userRoleViewModel);
 
 			}
-			return View(model);
+			var orderedModel = model.OrderBy(m => m.UserName).ToList();	
+			return View(orderedModel);
 
 		}
 		[HttpPost]
@@ -221,10 +238,9 @@ namespace EmployeeManagement.Controllers
 				UserName = user.UserName,
 				Email = user.Email,
 				City = user.City,
-				Roles = roles,
+				Roles = roles.OrderBy(r => r).ToList(),
 				Claims = claims.Select(c => c.Value).ToList()
 			};
-
 
 			return View(model);
 
@@ -318,6 +334,75 @@ namespace EmployeeManagement.Controllers
 
         }
 
+		[HttpGet]
+		public async Task<IActionResult> ManageUserRolesAsync(string userId)
+		{
+			ViewBag.userId = userId;
 
-    }
+			var user = await userManager.FindByIdAsync(userId);
+			if (user == null)
+			{
+				ViewBag.ErrorMessage = $"User with ID = {userId} cannot be found";
+				return View("StatusCodeError");
+			}
+
+			var model = new List<UserRolesViewModel>();
+
+			foreach (var role in roleManager.Roles.ToList())
+			{
+				var userRolesModel = new UserRolesViewModel
+				{
+					RoleName = role.Name,
+					RoleId = role.Id,
+				};
+
+				var result = await userManager.IsInRoleAsync(user, role.Name);
+
+				if (result)
+				{
+					userRolesModel.IsSelected = true;
+				}	
+
+				model.Add(userRolesModel);
+			}
+
+			model = model.OrderBy(r => r.RoleName).ToList();
+			return View(model);
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> ManageUserRolesAsync(List<UserRolesViewModel> model, string userId)
+		{
+			var user = await userManager.FindByIdAsync(userId);
+			if (user == null)
+			{
+				ViewBag.ErrorMessage = $"User with ID = {userId} cannot be found";
+				return View("StatusCodeError");
+			}
+
+			var roles = await userManager.GetRolesAsync(user);
+			var result = await userManager.RemoveFromRolesAsync(user, roles);
+
+			if (!result.Succeeded)
+			{
+				ModelState.AddModelError("", "Cannot remove user existing roles");
+				return View(model);
+			}
+
+			result = await userManager.AddToRolesAsync(user,
+				model.Where(x => x.IsSelected).Select(y => y.RoleName));
+
+			if (!result.Succeeded)
+			{
+				ModelState.AddModelError("", "Cannot add selected roles to user");
+				return View(model);
+			}
+
+
+			return RedirectToAction("EditUser", new { id = userId });
+		}
+
+
+
+	}
 }
