@@ -60,7 +60,9 @@ namespace EmployeeManagement
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("DeleteRolePolicy", policy => policy.RequireClaim("DeleteRole"));
+                options.AddPolicy("DeleteRolePolicy", policy => policy
+                    .RequireClaim("Delete Role")
+                    .RequireClaim("Create Role"));
             });
 
 

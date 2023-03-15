@@ -37,20 +37,24 @@ namespace EmployeeManagement.Controllers
 			int pageSize = 3;
 			int pageNumber = page ?? 1;
 
+
 			var users = userManager.Users.OrderBy(x => x.UserName).ToList();
+			var totalCount = users.Count;
 
-			var pagination = new Pagination<ApplicationUser>(users, pageSize);
-			var paginatedUsers = pagination.GetPage(pageNumber);
 
-			var model = new PaginatedViewModel
+            int totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+
+			if (pageNumber > totalPages)
 			{
-				Users = paginatedUsers,
-				PageNumber = pageNumber,
-				PageSize = pageSize,
-				TotalPages = pagination.TotalPages
-			};
+				pageNumber = 1;
+			}
 
-			return View(model);
+            var paginatedData = users.Skip((pageNumber - 1) * pageSize).Take(pageSize);
+			var pagination = new Pagination<ApplicationUser>(paginatedData, pageNumber, pageSize, totalCount, totalPages);
+
+			
+
+			return View(pagination);
 		}
 
 

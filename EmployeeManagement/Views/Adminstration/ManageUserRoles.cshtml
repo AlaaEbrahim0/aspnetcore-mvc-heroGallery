@@ -15,16 +15,16 @@
 		<div class="card-body">
 			@if(Model.Any())
 			{
-				@foreach (var role in Model)
+				@for (int i = 0; i < Model.Count; ++i)
 				{
 					<div class="form-check">
 
-						<input asp-for="@role.RoleId" type="hidden"/>
-						<input asp-for="@role.RoleName" type="hidden" />
+						<input asp-for="@Model[i].RoleId" type="hidden"/>
+						<input asp-for="@Model[i].RoleName" type="hidden" />
 
-						<input class="form-check-input" asp-for="@role.IsSelected">
-						<label class="form-check-label" asp-for="@role.IsSelected">
-							@role.RoleName
+						<input class="form-check-input" asp-for="@Model[i].IsSelected">
+						<label class="form-check-label" asp-for="@Model[i].IsSelected">
+							@Model[i].RoleName
 						</label>
 					</div>
 				}
