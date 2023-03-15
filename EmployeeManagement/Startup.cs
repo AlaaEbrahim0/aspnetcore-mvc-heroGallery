@@ -58,6 +58,14 @@ namespace EmployeeManagement
                     .AddEntityFrameworkStores<AppDbContext>();
 
 
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("DeleteRolePolicy", policy => policy
+                    .RequireClaim("Delete Role")
+                    .RequireClaim("Create Role"));
+            });
+
+
             services.AddDbContextPool<AppDbContext>(
                 options => options.UseSqlServer(_config.GetConnectionString("EmployeeDbConnection")));
             

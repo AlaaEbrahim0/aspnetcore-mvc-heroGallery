@@ -3,7 +3,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Production"
       },
       "ancmHostingModel": "InProcess"
     },

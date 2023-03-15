@@ -1,14 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata;
+using System.Runtime.InteropServices;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using EmployeeManagement.Models;
+using EmployeeManagement.Utilites;
 using EmployeeManagement.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using Microsoft.Extensions.Logging;
 
 namespace EmployeeManagement.Controllers
 {
@@ -17,18 +22,39 @@ namespace EmployeeManagement.Controllers
 	{
 		private readonly RoleManager<IdentityRole> roleManager;
 		private readonly UserManager<ApplicationUser> userManager;
+		private readonly ILogger<AdminstrationController> logger;
 
-		public AdminstrationController(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
+		public AdminstrationController(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager, ILogger<AdminstrationController>logger)
 		{
 			this.roleManager = roleManager;
 			this.userManager = userManager;
+			this.logger = logger;
 		}
 
 		[HttpGet]
-		public IActionResult UsersList()
+		public IActionResult UsersList(int ?page)
 		{
-			var users = userManager.Users;
-			return View(users);
+			int pageSize = 3;
+			int pageNumber = page ?? 1;
+
+
+			var users = userManager.Users.OrderBy(x => x.UserName).ToList();
+			var totalCount = users.Count;
+
+
+            int totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+
+			if (pageNumber > totalPages)
+			{
+				pageNumber = 1;
+			}
+
+            var paginatedData = users.Skip((pageNumber - 1) * pageSize).Take(pageSize);
+			var pagination = new Pagination<ApplicationUser>(paginatedData, pageNumber, pageSize, totalCount, totalPages);
+
+			
+
+			return View(pagination);
 		}
 
 
@@ -66,7 +92,7 @@ namespace EmployeeManagement.Controllers
 		[HttpGet]
 		public IActionResult RolesList()
 		{
-			var roles = roleManager.Roles;
+			var roles = roleManager.Roles.OrderBy(r => r.Name);
 			return View(roles);
 		}
 
@@ -93,6 +119,7 @@ namespace EmployeeManagement.Controllers
 					model.Users.Add(user.UserName);
 				}
 			}
+			model.Users = model.Users.OrderBy(r => r).ToList();
 			return View(model);
 		}
 		[HttpPost]
@@ -154,11 +181,11 @@ namespace EmployeeManagement.Controllers
 				{
 					userRoleViewModel.IsSelected = true;
 				}
-
 				model.Add(userRoleViewModel);
 
 			}
-			return View(model);
+			var orderedModel = model.OrderBy(m => m.UserName).ToList();	
+			return View(orderedModel);
 
 		}
 		[HttpPost]
@@ -217,10 +244,9 @@ namespace EmployeeManagement.Controllers
 				UserName = user.UserName,
 				Email = user.Email,
 				City = user.City,
-				Roles = roles,
-				Claims = claims.Select(c => c.Value).ToList()
+				Roles = roles.OrderBy(r => r).ToList(),
+				Claims = claims.Select(c => c.Value).OrderBy(c => c).ToList()
 			};
-
 
 			return View(model);
 
@@ -257,6 +283,7 @@ namespace EmployeeManagement.Controllers
 
 			return View(model);
 		}
+		[HttpPost]
 
 		public async Task<IActionResult> DeleteUserAsync(string id)
 		{
@@ -278,6 +305,8 @@ namespace EmployeeManagement.Controllers
 			return View("ListUsers");
 
 		}
+		[HttpPost]
+		[Authorize(Policy = "DeleteRolePolicy")]
 
         public async Task<IActionResult> DeleteRoleAsync(string id)
         {
@@ -287,19 +316,174 @@ namespace EmployeeManagement.Controllers
                 ViewBag.ErrorMessage = $"Role with ID = {id} cannot be found";
                 return View("StatusCodeError");
             }
-            var result = await roleManager.DeleteAsync(role);
-            if (result.Succeeded)
-            {
-                return RedirectToAction("RolesList", "Adminstration");
-            }
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError("", error.Description);
-            }
-            return View("RolesList");
+            try
+			{
+				var result = await roleManager.DeleteAsync(role);
+				if (result.Succeeded)
+				{
+					return RedirectToAction("RolesList", "Adminstration");
+				}
+				foreach (var error in result.Errors)
+				{
+					ModelState.AddModelError("", error.Description);
+				}
+				return View("RolesList");
+			}
+			catch(DbUpdateException ex)
+			{
+				logger.LogError($"Error Deleting Role: {ex.Message}");
+
+				ViewBag.ErrorTitle = $"{role.Name} role is in use";
+				ViewBag.ErrorMessage = $"{role.Name} role cannot be deleted as there are users in this role" +
+					$"If you want to delete this role, please remove the users from the " +
+					$"the role in and then try again";
+
+				return View("ExceptionError");
+			}
 
         }
 
+		[HttpGet]
+		public async Task<IActionResult> ManageUserRolesAsync(string userId)
+		{
+			ViewBag.userId = userId;
 
-    }
+			var user = await userManager.FindByIdAsync(userId);
+			if (user == null)
+			{
+				ViewBag.ErrorMessage = $"User with ID = {userId} cannot be found";
+				return View("StatusCodeError");
+			}
+
+			var model = new List<UserRolesViewModel>();
+
+			foreach (var role in roleManager.Roles.ToList())
+			{
+				var userRolesModel = new UserRolesViewModel
+				{
+					RoleName = role.Name,
+					RoleId = role.Id,
+				};
+
+				var result = await userManager.IsInRoleAsync(user, role.Name);
+
+				if (result)
+				{
+					userRolesModel.IsSelected = true;
+				}	
+
+				model.Add(userRolesModel);
+			}
+
+			model = model.OrderBy(r => r.RoleName).ToList();
+			return View(model);
+		}
+		
+
+		[HttpPost]
+		public async Task<IActionResult> ManageUserRolesAsync(List<UserRolesViewModel> model, string userId)
+		{
+			var user = await userManager.FindByIdAsync(userId);
+			if (user == null)
+			{
+				ViewBag.ErrorMessage = $"User with ID = {userId} cannot be found";
+				return View("StatusCodeError");
+			}
+
+			var roles = await userManager.GetRolesAsync(user);
+			var result = await userManager.RemoveFromRolesAsync(user, roles);
+
+			if (!result.Succeeded)
+			{
+				ModelState.AddModelError("", "Cannot remove user existing roles");
+				return View(model);
+			}
+
+			result = await userManager.AddToRolesAsync(user,
+				model.Where(x => x.IsSelected).Select(y => y.RoleName));
+
+			if (!result.Succeeded)
+			{
+				ModelState.AddModelError("", "Cannot add selected roles to user");
+				return View(model);
+			}
+
+
+			return RedirectToAction("EditUser", new { id = userId });
+		}
+
+		[HttpGet]
+		public async Task<IActionResult> ManageUserClaimsAsync (string userId)
+		{
+			var user = await userManager.FindByIdAsync(userId);
+
+			if (user == null)
+			{
+				ViewBag.ErrorMessage = $"User with ID = {userId} cannot be found";
+				return View("StatusCodeError");
+			}
+
+			var existingUserClaims = await userManager.GetClaimsAsync(user);
+
+			var model = new UserClaimsViewModel
+			{
+				UserId = userId
+			};
+
+			foreach (Claim claim in ClaimsStore.AllClaims)
+			{
+				UserClaim userClaim = new UserClaim
+				{
+					ClaimType = claim.Type
+				};
+
+				if (existingUserClaims.Any(c => c.Type == claim.Type))
+				{
+					userClaim.IsSelected = true;
+				}
+
+				model.Claims.Add(userClaim);
+			}
+			return View(model);
+
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> ManageUserClaimsAsync(UserClaimsViewModel model)
+		{
+			var user = await userManager.FindByIdAsync(model.UserId);
+
+			if (user == null)
+			{
+				ViewBag.ErrorMessage = $"User with ID = {model.UserId} cannot be found";
+				return View("StatusCodeError");
+			}
+
+			var claims = await userManager.GetClaimsAsync(user);
+			var result = await userManager.RemoveClaimsAsync(user, claims);
+
+			if (!result.Succeeded)
+			{
+				ModelState.AddModelError("", "Cannot remove user existing claims");
+				return View(model);
+			}
+
+			var selectedClaims = model.Claims
+				.Where(c => c.IsSelected)
+				.Select(c => new Claim(c.ClaimType, c.ClaimType));
+
+			result = await userManager.AddClaimsAsync(user, selectedClaims);
+
+			if (!result.Succeeded) {
+				ModelState.AddModelError("", "Cannot add selected claims to user");
+				return View(model);
+			}
+
+			return RedirectToAction("EditUser", new {Id = user.Id});
+ 
+		}
+
+
+
+	}
 }
