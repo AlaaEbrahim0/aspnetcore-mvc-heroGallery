@@ -37,6 +37,7 @@ Build and run the project
 *   JS
 *   Bootstrap
 *   jQuery
+*   SQL Server
 
 ## Authors
 
