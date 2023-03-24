@@ -30,7 +30,8 @@ namespace EmployeeManagement.Models
 				context.Employees.Remove(emp);
                 context.SaveChanges();
             }
-                return emp;
+            return emp;
+		
         }
 
         public IEnumerable<Employee> GetAllEmployees()
@@ -40,7 +41,6 @@ namespace EmployeeManagement.Models
 
 		public Employee GetEmployee(int Id)
 		{
-
 			return context.Employees.Find(Id); 
         }
 
