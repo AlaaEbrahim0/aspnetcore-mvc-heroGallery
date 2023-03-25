@@ -32,9 +32,10 @@ namespace EmployeeManagement.Controllers
         // [Route("~/")]
         // [Route("~/Home")]
         [AllowAnonymous]
+        [HttpGet]
         public ViewResult Index()
         {
-            var employeeList = _repository.GetAllEmployees();
+            var employeeList = _repository.GetAllEmployees().ToList();
             return View(employeeList);
         }
 
@@ -148,6 +149,20 @@ namespace EmployeeManagement.Controllers
             }
             return View(model);
 
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+
+        public IActionResult Delete(int id)
+        {
+            var emp = _repository.DeleteEmployee(id);
+            if (emp == null)
+            {
+                ViewBag.ErrorMessage = $"Employee with ID = {id} cannot be found";
+                return View("StatusCodeError");
+            }
+            return RedirectToAction("Index");
         }
 
         private string ProcessUploadedFile(EmployeeCreateViewModel model)
