@@ -52,23 +52,39 @@ namespace EmployeeManagement
             {
                 options.Password.RequiredLength = 10;
                 options.Password.RequiredUniqueChars = 3;
-                options.Password.RequireNonAlphanumeric= false;
+                options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = false;
             })
                     .AddEntityFrameworkStores<AppDbContext>();
 
 
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.AccessDeniedPath = new PathString("/Adminstration/AccessDenied");
+            });
+
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("DeleteRolePolicy", policy => policy
-                    .RequireClaim("Delete Role")
-                    .RequireClaim("Create Role"));
+                options.AddPolicy("DeleteRolePolicy",
+                    policy => policy.RequireClaim("Delete Role", "true"));
+
+                options.AddPolicy("EditRolePolicy", policy => policy.RequireAssertion(context =>
+                    context.User.IsInRole("Admin") &&
+                    context.User.HasClaim("Edit Role", "true") ||
+                    context.User.IsInRole("Super Admin")
+                ));
+
+
+                options.AddPolicy("AdminRolePolicy",
+                    policy => policy.RequireRole("Admin"));
+
             });
 
 
             services.AddDbContextPool<AppDbContext>(
                 options => options.UseSqlServer(_config.GetConnectionString("EmployeeDbConnection")));
-            
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -77,23 +93,23 @@ namespace EmployeeManagement
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseHsts(); 
+                app.UseHsts();
             }
-            
-			app.UseExceptionHandler("/Error");
 
-			app.UseStatusCodePagesWithReExecute("/Error/{0}");
+            app.UseExceptionHandler("/Error");
 
-			app.UseStaticFiles();
+            app.UseStatusCodePagesWithReExecute("/Error/{0}");
+
+            app.UseStaticFiles();
 
             app.UseAuthentication();
 
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
-            });
+			app.UseMvc(routes =>
+			{
+				routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
+			});
 
-            
-        }
+
+		}
     }
 }

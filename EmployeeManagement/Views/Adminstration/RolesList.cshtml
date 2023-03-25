@@ -1,5 +1,8 @@
 ﻿@model IEnumerable<IdentityRole>
 
+@using Microsoft.AspNetCore.Authorization;
+@inject IAuthorizationService authorizationService
+
 @{
     ViewBag.Title = "Roles List";
 }
@@ -25,8 +28,18 @@
             </div>
 
 			<div class="card-footer">
-                <a asp-controller="adminstration" asp-action="EditRole" asp-route-id="@role.Id" class="btn btn-primary">Edit</a>
-                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-modal-@role.Id">Delete</button>
+
+                @if ((await authorizationService.AuthorizeAsync(User, "EditRolePolicy")).Succeeded)
+                {
+                    <a asp-controller="adminstration" asp-action="EditRole" asp-route-id="@role.Id" class="btn btn-primary">Edit</a>
+                }
+
+                @if ((await authorizationService.AuthorizeAsync(User, "DeleteRolePolicy")).Succeeded)
+                {
+                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-modal-@role.Id">Delete</button>
+                }
+
+
 
             </div>
 
@@ -65,7 +78,9 @@ else
 			<h5 class="card-title">
                 Use the button below to create a new role
             </h5>
-		    <a class="btn btn-primary" style="width:auto" asp-action="CreateRole" asp-controller="Adminstration">Create Role</a>
+
+                <a class="btn btn-primary" style="width:auto" asp-action="CreateRole" asp-controller="Adminstration">Create Role</a>
+            }
         </div>
     </div>    
 }
