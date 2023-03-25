@@ -27,7 +27,41 @@
 
                 <a asp-controller="home" asp-action="index" class="btn btn-primary">Back</a>
                 <a asp-controller="Home" asp-action="Edit" asp-route-id="@Model.Employee.Id" class="btn btn-primary m-1">Edit</a>
-                <a href="#" class="btn btn-danger  m-1">Delete</a>
+                <button asp-route-id="@Model.Employee.Id"
+                        class="btn btn-danger m-1" data-bs-toggle="modal"
+                        data-bs-target="#delete-modal-@Model.Employee.Id">
+                    Delete
+                </button>
+
+                <div class="modal fade" id="delete-modal-@Model.Employee.Id">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5>Delete Confirmation</h5>
+                                <button type="button"
+                                        class="close"
+                                        data-bs-dismiss="modal"
+                                        aria-label="Close"
+                                        data-bs-target="#modal"></button>
+
+                            </div>
+
+                            <div class="modal-body">
+                                Are you sure you want to delete role:
+                                <br>
+                                <span class="font-weight-bold">@Model.Employee.Id</span>
+                            </div>
+
+                            <div class="modal-footer">
+                                <form method="post" asp-controller="home" asp-action="Delete" asp-route-id="@Model.Employee.Id">
+                                    <button type="submit" class="btn btn-danger" data-bs-dismiss="modal">Yes</button>
+                                </form>
+                                <button class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
