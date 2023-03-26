@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 namespace EmployeeManagement.Utilites
 {
 	public class ValidEmailDomainAttribute: ValidationAttribute
-	{
+    {
 		private readonly string allowedDomain;
 
 		public ValidEmailDomainAttribute(string allowedDomain)
