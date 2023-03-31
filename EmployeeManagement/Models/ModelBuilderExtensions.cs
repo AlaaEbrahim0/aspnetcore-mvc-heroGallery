@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EmployeeManagement.Models.Lookups;
+using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManagement.Models
 {
