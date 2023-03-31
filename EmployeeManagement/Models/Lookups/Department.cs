@@ -1,4 +1,4 @@
-﻿namespace EmployeeManagement.Models
+﻿namespace EmployeeManagement.Models.Lookups
 {
     public enum Department
     {

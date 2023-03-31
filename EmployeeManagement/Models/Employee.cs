@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using EmployeeManagement.Models;
 
 namespace EmployeeManagement.Models
 {
@@ -11,6 +12,9 @@ namespace EmployeeManagement.Models
         [MinLength(10, ErrorMessage = "Name cannot be less than 10 characters")]
         [MaxLength(50, ErrorMessage = "Name cannot exceed 50 characters")]
         public string Name { get; set; }
+
+        [Required]
+        public Gender? Gender { get; set; }
 
         [Required]
         [RegularExpression(@"^[a-zA-Z0-9!#$%^&*-+=.~`_]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-]+$", ErrorMessage ="Invalid Email Format")]
