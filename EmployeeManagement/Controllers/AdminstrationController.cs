@@ -104,7 +104,6 @@ namespace EmployeeManagement.Controllers
         }
 
         [HttpGet]
-        [Authorize(Policy = "EditRolePolicy")]
         public async Task<IActionResult> EditRole(string id)
         {
             var role = await roleManager.FindByIdAsync(id);
@@ -131,8 +130,6 @@ namespace EmployeeManagement.Controllers
             return View(model);
         }
         [HttpPost]
-        [Authorize(Policy = "EditRolePolicy")]
-
         public async Task<IActionResult> EditRole(EditRoleViewModel model)
         {
             if (ModelState.IsValid)
@@ -354,6 +351,7 @@ namespace EmployeeManagement.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "EditRolePolicy")]
         public async Task<IActionResult> ManageUserRolesAsync(string userId)
         {
             ViewBag.userId = userId;
@@ -391,7 +389,8 @@ namespace EmployeeManagement.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> ManageUserRolesAsync(List<UserRolesViewModel> model, string userId)
+		[Authorize(Policy = "EditRolePolicy")]
+		public async Task<IActionResult> ManageUserRolesAsync(List<UserRolesViewModel> model, string userId)
         {
             var user = await userManager.FindByIdAsync(userId);
             if (user == null)
@@ -423,7 +422,8 @@ namespace EmployeeManagement.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ManageUserClaimsAsync(string userId)
+		[Authorize(Policy = "EditRolePolicy")]
+		public async Task<IActionResult> ManageUserClaimsAsync(string userId)
         {
             var user = await userManager.FindByIdAsync(userId);
 
@@ -460,7 +460,8 @@ namespace EmployeeManagement.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ManageUserClaimsAsync(UserClaimsViewModel model)
+		[Authorize(Policy = "EditRolePolicy")]
+		public async Task<IActionResult> ManageUserClaimsAsync(UserClaimsViewModel model)
         {
             var user = await userManager.FindByIdAsync(model.UserId);
 
