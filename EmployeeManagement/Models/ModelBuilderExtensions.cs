@@ -12,6 +12,7 @@ namespace EmployeeManagement.Models
                       Id = 1,
                       Name = "Mary",
                       Department = Department.IT,
+                      Gender = Gender.Female,
                       Email = "mary@pragimtech.com"
                   },
                   new Employee
@@ -19,6 +20,7 @@ namespace EmployeeManagement.Models
                       Id = 2,
                       Name = "John",
                       Department = Department.IT,
+                      Gender = Gender.Male,
                       Email = "john@pragimtech.com"
                   }
             );

@@ -84,6 +84,7 @@ namespace EmployeeManagement.Controllers
                 {
                     Name = model.Name,
                     Email = model.Email,
+                    Gender = model.Gender,
                     Department = model.Department,
                     PhotoPath = uniqueFileName
                 };
@@ -113,6 +114,7 @@ namespace EmployeeManagement.Controllers
                 Id = employee.Id,
                 Name = employee.Name,
                 Email = employee.Email,
+                Gender = employee.Gender,
                 Department = employee.Department,
                 ExistingPhotoPath = employee.PhotoPath,
 
@@ -129,9 +131,10 @@ namespace EmployeeManagement.Controllers
             if (ModelState.IsValid)
             {
                 Employee employee = _repository.GetEmployee(model.Id);
-                employee.Name = model.Name;
-                employee.Email = model.Email;
+                employee.Name       = model.Name;
+                employee.Email      = model.Email;
                 employee.Department = model.Department;
+                employee.Gender     = model.Gender;
 
                 if (model.Photo != null)
                 {
