@@ -8,11 +8,6 @@ namespace EmployeeManagement.Security
 	{
 		protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, ManageAdminRolesAndClaimRequirement requirement)
 		{
-			var authFilterContext = context.Resource as AuthorizationFilterContext;
-			if (authFilterContext == null)
-			{
-				return Task.CompletedTask;
-			}
 
 			if (context.User.IsInRole("Super Admin"))
 			{

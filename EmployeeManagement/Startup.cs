@@ -76,6 +76,7 @@ namespace EmployeeManagement
                 options.AddPolicy("AdminRolePolicy",
                     policy => policy.RequireRole("Admin"));
 
+
             });
             services.AddSingleton<IAuthorizationHandler, CanEditOnlyOtherAdminRolesAndClaimHandler>();
             services.AddSingleton<IAuthorizationHandler, SuperAdminHandler>();
