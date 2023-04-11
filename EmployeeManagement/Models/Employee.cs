@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using EmployeeManagement.Models;
+using EmployeeManagement.Models.Lookups;
 
 namespace EmployeeManagement.Models
 {
