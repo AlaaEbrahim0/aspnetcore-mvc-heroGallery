@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using EmployeeManagement.Models;
+using EmployeeManagement.Models.Lookups;
 
 namespace EmployeeManagement.Models
 {
@@ -15,6 +15,8 @@ namespace EmployeeManagement.Models
 
         [Required]
         public Gender? Gender { get; set; }
+
+        public string Biography { get; set; }
 
         [Required]
         [RegularExpression(@"^[a-zA-Z0-9!#$%^&*-+=.~`_]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-]+$", ErrorMessage ="Invalid Email Format")]

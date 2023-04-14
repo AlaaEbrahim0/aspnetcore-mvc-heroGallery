@@ -17,6 +17,9 @@ namespace EmployeeManagement.Models
 			base.OnModelCreating(modelBuilder);
 			modelBuilder.Seed();
 
+			modelBuilder.Entity<Employee>()
+				.Ignore("Biography");
+
 			foreach(var foreignKey in modelBuilder.Model.GetEntityTypes()
 				.SelectMany(e => e.GetForeignKeys()))
 			{
