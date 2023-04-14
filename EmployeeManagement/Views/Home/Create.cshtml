@@ -57,19 +57,17 @@
 
 	<div asp-validation-summary="All" class="text-danger"></div>
 
-	<div class="form-group row">
-		<button type="submit" class="btn btn-primary col-1">Create</button>
-	</div>
+	<button type="submit" class="btn btn-primary col-1">Create</button>
 
-	@section Scripts{
-		<script>
-			$(document).ready(function(){
-				$('.custom-file-input').on("change", function (){
-					var fileName = $(this).val().split("\\").pop();
-					$(this).next('.custom-file-label').html(fileName);
-				});
-			});
-		</script>
-	}
 </form>
 
+@section Scripts{
+	<script>
+		$(document).ready(function(){
+			$('.custom-file-input').on("change", function (){
+				var fileName = $(this).val().split("\\").pop();
+				$(this).next('.custom-file-label').html(fileName);
+			});
+		});
+	</script>
+}

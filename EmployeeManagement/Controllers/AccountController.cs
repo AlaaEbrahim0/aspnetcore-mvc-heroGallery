@@ -147,7 +147,7 @@ namespace EmployeeManagement.Controllers
 		public async Task<IActionResult> ExternalLoginCallBack (string returnUrl = null, string remoteError = null)
 		{
 			//If the returnUrl is null redirect the uset to the home page
-			returnUrl = returnUrl ?? Url.Content("~");
+			returnUrl = returnUrl ?? Url.Content("~/");
 
 			LoginViewModel model = new LoginViewModel
 			{
