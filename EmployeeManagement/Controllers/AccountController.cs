@@ -244,6 +244,16 @@ namespace EmployeeManagement.Controllers
                         var confirmationLink = Url.Action("ConfirmEmail", "Account",
                         new { userId = user.Id, token = emailConfirmationToken }, Request.Scheme);
 
+						var subject = "Confirming Your Email Address";
+
+						var message = $"Dear {info.Principal.FindFirstValue(ClaimTypes.Name)},\r\n\r\n" +
+							$"Thank you for signing up for our service! " +
+							$"To complete the registration process, we need to verify your email address. " +
+							$"Please click the link below to confirm your email:\r\n\r\n{confirmationLink}\r\n\r\n" +
+							$"If you did not sign up for this service, please ignore this email.\r\n\r\nThank you,";
+
+						await emailSender.SendEmailAsync(email, subject, message);
+
 						ViewBag.ConfirmationLink = confirmationLink;
 						return View("SuccessfulRegisteration");
                     }

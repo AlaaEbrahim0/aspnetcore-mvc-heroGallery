@@ -86,6 +86,7 @@ namespace EmployeeManagement
             services.AddTransient<IEmailSender, EmailSender>();
 
 
+
 			services.AddAuthentication()
 	          .AddGoogle(options =>
 	          {
