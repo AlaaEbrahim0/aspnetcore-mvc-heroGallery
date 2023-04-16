@@ -9,32 +9,39 @@ using EmployeeManagement.Models;
 using EmployeeManagement.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using NLog.Time;
 
 namespace EmployeeManagement.Controllers
 {
 	public class AccountController : Controller
 	{
-        private readonly UserManager<ApplicationUser> userManager;
-        private readonly SignInManager<ApplicationUser> signInManager;
+		private readonly UserManager<ApplicationUser> userManager;
+		private readonly SignInManager<ApplicationUser> signInManager;
+		private readonly ILogger<AccountController> logger;
+        private readonly IEmailSender emailSender;
 
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
-		{ 
-            this.userManager = userManager;
-            this.signInManager = signInManager;
+        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager,
+			ILogger<AccountController> logger, IEmailSender emailSender)
+		{
+			this.userManager = userManager;
+			this.signInManager = signInManager;
+			this.logger = logger;
+            this.emailSender = emailSender;
         }
 
-        
-        [HttpPost]
-        public async Task<IActionResult> Logout()
-        {
-            await signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Home");
-        }
 
-        [AllowAnonymous]
-        [HttpGet]
+		[HttpPost]
+		public async Task<IActionResult> Logout()
+		{
+			await signInManager.SignOutAsync();
+			return RedirectToAction("Index", "Home");
+		}
+
+		[AllowAnonymous]
+		[HttpGet]
 		public async Task<IActionResult> Login(string returnUrl)
 		{
 			var model = new LoginViewModel
@@ -43,20 +50,25 @@ namespace EmployeeManagement.Controllers
 				ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList()
 			};
 			return View(model);
-        }
+		}
 
 		[AllowAnonymous]
 		[HttpPost]
 		public async Task<IActionResult> Login(LoginViewModel model, string returnUrl)
 		{
+			model.ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
 			if (ModelState.IsValid)
 			{
+				var user = await userManager.FindByEmailAsync(model.Email);
 
-				var user = new ApplicationUser
+				if (user != null && !user.EmailConfirmed &&
+				   (await userManager.CheckPasswordAsync(user, model.Password)))
 				{
-					UserName = model.Email,
-					Email = model.Email
-				};
+					ModelState.AddModelError("", "Email not confirmed yet");
+					return View(model);
+				}
+
 				var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
 
 				if (result.Succeeded)
@@ -68,6 +80,7 @@ namespace EmployeeManagement.Controllers
 				}
 
 				ModelState.AddModelError("", "Invalid Login Attempt");
+
 			}
 
 			return View(model);
@@ -75,40 +88,48 @@ namespace EmployeeManagement.Controllers
 
 
 		[HttpPost]
-        [AllowAnonymous]
-        public async Task<IActionResult> Register(RegisterViewModel model)
-        {
-            if (ModelState.IsValid) 
-            {
+		[AllowAnonymous]
+		public async Task<IActionResult> Register(RegisterViewModel model)
+		{
+			if (ModelState.IsValid)
+			{
 				var user = new ApplicationUser
 				{
 					UserName = model.Email,
 					Email = model.Email,
 					City = model.City
-                };
+				};
 
-                var result = await userManager.CreateAsync(user, model.Password);
+				var result = await userManager.CreateAsync(user, model.Password);
 
-                if (result.Succeeded)
-                {
+				if (result.Succeeded)
+				{
+					var emailConfirmationToken = await userManager.GenerateEmailConfirmationTokenAsync(user);
+
+					var confirmationLink = Url.Action("ConfirmEmail", "Account",
+						new { userId = user.Id, token = emailConfirmationToken }, Request.Scheme);
+
+					logger.Log(LogLevel.Warning, confirmationLink);
+
+
 					if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
 					{
 						return RedirectToAction("UsersList", "Adminstration");
 					}
 
-					await signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("index", "home");
-                }
+					ViewBag.ConfirmationLink = confirmationLink;
+					return View("SuccessfulRegisteration");
+				}
 
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError("", error.Description);
-                }
+				foreach (var error in result.Errors)
+				{
+					ModelState.AddModelError("", error.Description);
+				}
 
-            }
-            return View(model);
+			}
+			return View(model);
 
-        }
+		}
 
 		[AllowAnonymous]
 		[HttpGet]
@@ -121,7 +142,7 @@ namespace EmployeeManagement.Controllers
 		[AllowAnonymous]
 		public async Task<IActionResult> IsEmailInUse(string email)
 		{
-			
+
 			var user = await userManager.FindByEmailAsync(email);
 			if (user == null)
 			{
@@ -136,15 +157,15 @@ namespace EmployeeManagement.Controllers
 		[HttpPost]
 		public IActionResult ExternalLogin(string provider, string returnUrl)
 		{
-			var redirectUrl = Url.Action("ExternalLoginCallBack", "Account", 
-				new {ReturnUrl = returnUrl});
-			
+			var redirectUrl = Url.Action("ExternalLoginCallBack", "Account",
+				new { ReturnUrl = returnUrl });
+
 			var properites = signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
 			return new ChallengeResult(provider, properites);
 		}
 
 		[AllowAnonymous]
-		public async Task<IActionResult> ExternalLoginCallBack (string returnUrl = null, string remoteError = null)
+		public async Task<IActionResult> ExternalLoginCallBack(string returnUrl = null, string remoteError = null)
 		{
 			//If the returnUrl is null redirect the uset to the home page
 			returnUrl = returnUrl ?? Url.Content("~/");
@@ -176,13 +197,27 @@ namespace EmployeeManagement.Controllers
 				return View("Login", model);
 			}
 
+			var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+			ApplicationUser user = null;
+
+			if (email != null)
+			{
+				user = await userManager.FindByEmailAsync(email);
+
+
+				if (user != null && !user.EmailConfirmed)
+				{
+					ModelState.AddModelError("", "Email Not Confirmed Yet");
+					return View("login", model);
+				}	 
+			}
 
 			//Now we can easily sign in using the ExternalLoginSignInAsync method passing it the login provider(google in our case)
 			//the generated provider key by google for the entered user 
 			var signInResult = await signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey,
 				isPersistent: false, bypassTwoFactor: true);
 
-			
+
 			if (signInResult.Succeeded)
 			{
 				return LocalRedirect(returnUrl);
@@ -192,12 +227,8 @@ namespace EmployeeManagement.Controllers
 			else
 			{
 
-				var email = info.Principal.FindFirstValue(ClaimTypes.Email);
-
 				if (email != null)
 				{
-					var user = await userManager.FindByEmailAsync(email);
-
 					if (user == null)
 					{
 						user = new ApplicationUser
@@ -207,7 +238,15 @@ namespace EmployeeManagement.Controllers
 						};
 
 						await userManager.CreateAsync(user);
-					}
+
+						var emailConfirmationToken = await userManager.GenerateEmailConfirmationTokenAsync(user);
+
+                        var confirmationLink = Url.Action("ConfirmEmail", "Account",
+                        new { userId = user.Id, token = emailConfirmationToken }, Request.Scheme);
+
+						ViewBag.ConfirmationLink = confirmationLink;
+						return View("SuccessfulRegisteration");
+                    }
 
 					await userManager.AddLoginAsync(user, info);
 					await signInManager.SignInAsync(user, isPersistent: false);
@@ -222,6 +261,33 @@ namespace EmployeeManagement.Controllers
 			}
 
 
+		}
+		[AllowAnonymous]
+		[HttpGet]
+
+		public async Task<IActionResult> ConfirmEmail(string userId, string token)
+		{
+			if (userId == null || token == null)
+			{
+				return RedirectToAction("index", "home");
+			}
+
+			var user = await userManager.FindByIdAsync(userId);
+
+			if (user == null)
+			{
+				ViewBag.ErrorMessage = $"The User Id {userId} is invalid";
+				return View("Not Found");
+			}
+
+			var result = await userManager.ConfirmEmailAsync(user, token);
+			if (result.Succeeded)
+			{
+				return View("ConfirmedEmail");
+			}
+
+			ViewBag.ErrorMessage = "Email Cannot Be Confirmed";
+			return View("ExceptionError");
 		}
 
 

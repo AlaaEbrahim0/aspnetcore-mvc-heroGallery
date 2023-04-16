@@ -4,11 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using EmployeeManagement.Models;
 using EmployeeManagement.Security;
+using EmployeeManagement.Utilites;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -44,8 +46,7 @@ namespace EmployeeManagement
 
                 options.Filters.Add(new AuthorizeFilter(policy));
 
-            })
-                .AddXmlSerializerFormatters();
+            });
 
             services.AddScoped<IEmployeeRepository, SqlEmployeeRepository>();
 
@@ -55,8 +56,10 @@ namespace EmployeeManagement
                 options.Password.RequiredUniqueChars = 3;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = false;
+                options.SignIn.RequireConfirmedEmail = true;
             })
-                    .AddEntityFrameworkStores<AppDbContext>();
+                    .AddEntityFrameworkStores<AppDbContext>()
+                    .AddDefaultTokenProviders();
 
 
 
@@ -80,6 +83,7 @@ namespace EmployeeManagement
             });
             services.AddSingleton<IAuthorizationHandler, CanEditOnlyOtherAdminRolesAndClaimHandler>();
             services.AddSingleton<IAuthorizationHandler, SuperAdminHandler>(); 
+            services.AddTransient<IEmailSender, EmailSender>();
 
 
 			services.AddAuthentication()
