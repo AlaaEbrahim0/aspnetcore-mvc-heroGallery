@@ -337,7 +337,7 @@ namespace EmployeeManagement.Controllers
 					await emailSender.SendEmailAsync(model.Email, subject, message);
 
 				}
-				return View("ForgetPasswordConfirmation");
+				return View("ForgotPasswordConfirmation");
 
 			}
 			return View(model);
@@ -349,12 +349,42 @@ namespace EmployeeManagement.Controllers
 		{
 			if (email == null || token == null)
 			{
-				ModelState.AddModelError("", "Invalid Password reset toekn");
+				ModelState.AddModelError("", "Invalid Password reset token");
 			}
 			return View();
 		}
 
-		
+		[HttpPost]
+		[AllowAnonymous]
+		public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+		{
+			if (ModelState.IsValid)
+			{
+				var user = await userManager.FindByEmailAsync(model.Email);
+
+				if (user != null)
+				{
+					var result = await userManager.ResetPasswordAsync(user, model.Token, model.Password);
+					if (result.Succeeded)
+					{
+						return View("ResetPasswordSuccessful");
+					}
+
+					foreach(var error in result.Errors)
+					{
+						ModelState.AddModelError("", error.Description);
+					}
+
+					return View(model);
+				}
+
+				return View("ResetPasswordSuccessful");
+			}
+
+			return View(model);
+		}
+
+
 
 
 

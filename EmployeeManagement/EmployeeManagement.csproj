@@ -7,15 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Views\Account\ForgetPasswordConfirmation.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Remove="Utilites\EmailSender.cs~RF45318f.TMP" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="Views\Account\ForgetPasswordConfirmation.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
