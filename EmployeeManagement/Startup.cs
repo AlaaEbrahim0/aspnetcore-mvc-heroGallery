@@ -87,17 +87,17 @@ namespace EmployeeManagement
 
 
 
-			services.AddAuthentication()
-	          .AddGoogle(options =>
-	          {
-		          options.ClientId = "133457337525-vm4ne12nifb0ilrreuba2g5p09d90qui.apps.googleusercontent.com";
-		          options.ClientSecret = "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";
- 
-	          });
+            services.AddAuthentication()
+              .AddGoogle(options =>
+              {
+                  options.ClientId = "133457337525-vm4ne12nifb0ilrreuba2g5p09d90qui.apps.googleusercontent.com";
+                  options.ClientSecret = "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";
+
+              });
 
 
 			services.AddDbContextPool<AppDbContext>(
-                options => options.UseSqlServer(_config.GetConnectionString("EmployeeDbConnection")));
+                options => options.UseSqlServer(_config.GetConnectionString("EmployeeDbProductionConnection")));
 
         }
 

@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using NLog.Time;
 
 namespace EmployeeManagement.Controllers
@@ -21,16 +22,16 @@ namespace EmployeeManagement.Controllers
 		private readonly UserManager<ApplicationUser> userManager;
 		private readonly SignInManager<ApplicationUser> signInManager;
 		private readonly ILogger<AccountController> logger;
-        private readonly IEmailSender emailSender;
+		private readonly IEmailSender emailSender;
 
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager,
+		public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager,
 			ILogger<AccountController> logger, IEmailSender emailSender)
 		{
 			this.userManager = userManager;
 			this.signInManager = signInManager;
 			this.logger = logger;
-            this.emailSender = emailSender;
-        }
+			this.emailSender = emailSender;
+		}
 
 
 		[HttpPost]
@@ -209,7 +210,7 @@ namespace EmployeeManagement.Controllers
 				{
 					ModelState.AddModelError("", "Email Not Confirmed Yet");
 					return View("login", model);
-				}	 
+				}
 			}
 
 			//Now we can easily sign in using the ExternalLoginSignInAsync method passing it the login provider(google in our case)
@@ -241,8 +242,8 @@ namespace EmployeeManagement.Controllers
 
 						var emailConfirmationToken = await userManager.GenerateEmailConfirmationTokenAsync(user);
 
-                        var confirmationLink = Url.Action("ConfirmEmail", "Account",
-                        new { userId = user.Id, token = emailConfirmationToken }, Request.Scheme);
+						var confirmationLink = Url.Action("ConfirmEmail", "Account",
+						new { userId = user.Id, token = emailConfirmationToken }, Request.Scheme);
 
 						var subject = "Confirming Your Email Address";
 
@@ -256,7 +257,7 @@ namespace EmployeeManagement.Controllers
 
 						ViewBag.ConfirmationLink = confirmationLink;
 						return View("SuccessfulRegisteration");
-                    }
+					}
 
 					await userManager.AddLoginAsync(user, info);
 					await signInManager.SignInAsync(user, isPersistent: false);
@@ -274,7 +275,6 @@ namespace EmployeeManagement.Controllers
 		}
 		[AllowAnonymous]
 		[HttpGet]
-
 		public async Task<IActionResult> ConfirmEmail(string userId, string token)
 		{
 			if (userId == null || token == null)
@@ -300,6 +300,61 @@ namespace EmployeeManagement.Controllers
 			return View("ExceptionError");
 		}
 
+		[HttpGet]
+		[AllowAnonymous]
+		public IActionResult ForgotPassword()
+		{
+			return View("ForgotPassword");
+		}
+
+		[HttpPost]
+		[AllowAnonymous]
+		public async Task<IActionResult> ForgotPasswordAsync(ForgotPasswordViewModel model)
+		{
+			if (ModelState.IsValid)
+			{
+				var user = await userManager.FindByEmailAsync(model.Email);
+
+				if (user != null && await userManager.IsEmailConfirmedAsync(user))
+				{
+					var token = await userManager.GeneratePasswordResetTokenAsync(user);
+
+					var passwordResetLink = Url.Action("ResetPassword", "Account",
+						new { email = model.Email, token = token }, Request.Scheme);
+
+					var subject = "Reset Your Password";
+
+					var message = $"Dear {user.UserName},\r\n\r\n" +
+						$"We received a request to reset your password. If you did not make this request, please ignore this email.\r\n\r\n" +
+						$"To reset your password, please click the link below:\r\n\r\n{passwordResetLink}\r\n\r\n" +
+						$"This link is only valid for the next 24 hours. If you do not reset your password within this time, " +
+						$"you will need to request another password reset.\r\n\r\n" +
+						$"If you have any questions or concerns, please contact our support team.\r\n\r\n" +
+						$"Thank you,";
+
+					logger.Log(LogLevel.Warning, message);
+
+					await emailSender.SendEmailAsync(model.Email, subject, message);
+
+				}
+				return View("ForgetPasswordConfirmation");
+
+			}
+			return View(model);
+		}
+
+		[HttpGet]
+		[AllowAnonymous]
+		public IActionResult ResetPassword(string email, string token)
+		{
+			if (email == null || token == null)
+			{
+				ModelState.AddModelError("", "Invalid Password reset toekn");
+			}
+			return View();
+		}
+
+		
 
 
 

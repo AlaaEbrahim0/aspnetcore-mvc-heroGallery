@@ -5,7 +5,8 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "ancmHostingModel": "InProcess"
+      "ancmHostingModel": "InProcess",
+      "nativeDebugging": false
     },
     "EmployeeManagement": {
       "commandName": "Project",
