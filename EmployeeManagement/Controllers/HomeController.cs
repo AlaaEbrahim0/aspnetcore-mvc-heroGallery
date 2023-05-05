@@ -4,8 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using EmployeeManagement.Models;
+using EmployeeManagement.Security;
 using EmployeeManagement.ViewModel;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyModel.Resolution;
@@ -19,8 +21,10 @@ namespace EmployeeManagement.Controllers
         private readonly IEmployeeRepository _repository;
         private readonly IWebHostEnvironment webHostEnvironment;
         private readonly ILogger logger;
+        private readonly IDataProtector protector;
 
-        public HomeController(IEmployeeRepository repository, IWebHostEnvironment webHostEnvironment, ILogger<HomeController>logger)
+        public HomeController(IEmployeeRepository repository, IWebHostEnvironment webHostEnvironment, 
+            ILogger<HomeController>logger, IDataProtectionProvider dataProtectionProvider, DataProtectionPurposeStrings dataProtectionPurposeStrings)
         {
             _repository = repository;
             this.webHostEnvironment = webHostEnvironment;
@@ -117,7 +121,6 @@ namespace EmployeeManagement.Controllers
                 Gender = employee.Gender,
                 Department = employee.Department,
                 ExistingPhotoPath = employee.PhotoPath,
-
             };
 
             return View(employeeEdit);
@@ -130,7 +133,7 @@ namespace EmployeeManagement.Controllers
         {
             if (ModelState.IsValid)
             {
-                Employee employee = _repository.GetEmployee(model.Id);
+                Employee employee   = _repository.GetEmployee(model.Id);
                 employee.Name       = model.Name;
                 employee.Email      = model.Email;
                 employee.Department = model.Department;

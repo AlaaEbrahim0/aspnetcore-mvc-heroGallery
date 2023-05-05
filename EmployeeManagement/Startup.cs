@@ -62,7 +62,6 @@ namespace EmployeeManagement
                     .AddDefaultTokenProviders();
 
 
-
             services.ConfigureApplicationCookie(options =>
             {
                 options.AccessDeniedPath = new PathString("/Adminstration/AccessDenied");
@@ -82,9 +81,14 @@ namespace EmployeeManagement
 
             });
             services.AddSingleton<IAuthorizationHandler, CanEditOnlyOtherAdminRolesAndClaimHandler>();
-            services.AddSingleton<IAuthorizationHandler, SuperAdminHandler>(); 
+            services.AddSingleton<IAuthorizationHandler, SuperAdminHandler>();
+            services.AddSingleton<DataProtectionPurposeStrings>();
             services.AddTransient<IEmailSender, EmailSender>();
 
+            services.Configure<DataProtectionTokenProviderOptions>(options =>
+            {
+                options.TokenLifespan = TimeSpan.FromHours(5);
+            });
 
 
             services.AddAuthentication()
