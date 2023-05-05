@@ -4,11 +4,9 @@
 	ViewBag.Title = "Edit User";
 }
 
-
-
 <h1>Edit User</h1>
 
-<form method="post" asp-controller="adminstration" as	p-action="EditUser">
+<form method="post" asp-controller="adminstration" asp-action="EditUser">
 	<div class="form-group">
 		<label class="col-form-label" asp-for="Id"></label>
 		<input class="form-control" asp-for="Id" disabled/>
