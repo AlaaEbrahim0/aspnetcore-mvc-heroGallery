@@ -10,13 +10,7 @@ namespace EmployeeManagement.ViewModel
 		
 		[Required]
 		[EmailAddress]
-		//[RegularExpression(@"^[a-zA-Z0-9!#$%^&*_=+`~.]+@pragimtech.com", ErrorMessage = "Email domain must be pragimtech.com")]
-		[ValidEmailDomain
-			(
-				allowedDomain: "pragimtech.com",
-				ErrorMessage ="Email domain must be pragimtech.com"
-			)
-		]
+		[RegularExpression(@"^[a-zA-Z0-9!#$%^&*_=+`~.]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$", ErrorMessage = "Email domain must be pragimtech.com")]
 
 		[Remote("IsEmailInUse", "Account")]
 		public string Email { get; set; }

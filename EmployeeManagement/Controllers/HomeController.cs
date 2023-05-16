@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Threading.Tasks;
 using EmployeeManagement.Models;
 using EmployeeManagement.Security;
 using EmployeeManagement.ViewModel;
@@ -82,7 +83,7 @@ namespace EmployeeManagement.Controllers
         {
             if (ModelState.IsValid)
             {
-                string uniqueFileName = ProcessUploadedFile(model);
+                string uniqueFileName = ProcessUploadedFileAsync(model);
 
                 Employee newEmployee = new Employee()
                 {
@@ -146,7 +147,7 @@ namespace EmployeeManagement.Controllers
                         string path = Path.Combine(webHostEnvironment.WebRootPath, "imgs", model.ExistingPhotoPath);
                         System.IO.File.Delete(path);
                     }
-                    employee.PhotoPath = ProcessUploadedFile(model);
+                    employee.PhotoPath = ProcessUploadedFileAsync(model);
                 }
 
                 _repository.UpdateEmployee(employee);
@@ -171,22 +172,24 @@ namespace EmployeeManagement.Controllers
             return RedirectToAction("Index");
         }
 
-        private string ProcessUploadedFile(EmployeeCreateViewModel model)
+        private async Task<string> ProcessUploadedFileAsync(EmployeeCreateViewModel model)
         {
+            var photo = model.Photo;
             string uniqueFileName = null;
 
-            if (model.Photo != null)
+
+            if (photo != null)
             {
                 string wwwroot = webHostEnvironment.WebRootPath;
-                string uploadDir = Path.Combine(wwwroot, "imgs");
-                uniqueFileName = Guid.NewGuid().ToString() + "_" + model.Photo.FileName;
-                string fullPath = Path.Combine(uploadDir, uniqueFileName);
+                string imgs = Path.Combine(wwwroot, "imgs");
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + photo.FileName;
+                string fullPath = Path.Combine(imgs, uniqueFileName);
 
-                using (var stream = new FileStream(fullPath, FileMode.Create))
-                {
-                    model.Photo.CopyTo(stream);
-                }
+                using var stream = new FileStream(fullPath, FileMode.Create);
+                await model.Photo.CopyToAsync(stream);
+
             }
+
             return uniqueFileName;
         }
 
