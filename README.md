@@ -2,7 +2,6 @@
 
 This project is an Employee Management System built using ASP.NET Core, Entity Framework Core, HTML, CSS, JS, Bootstrap, and jQuery. The purpose of this system is to manage employee data, including personal information, employment information, and salary information.
 
-less Copy code
 
 ## Prerequisites
 
@@ -37,6 +36,7 @@ Build and run the project
 *   JS
 *   Bootstrap
 *   jQuery
+*   SQL Server
 
 ## Authors
 
