@@ -172,7 +172,7 @@ namespace EmployeeManagement.Controllers
             return RedirectToAction("Index");
         }
 
-        private async Task<string> ProcessUploadedFileAsync(EmployeeCreateViewModel model)
+        private string ProcessUploadedFileAsync(EmployeeCreateViewModel model)
         {
             var photo = model.Photo;
             string uniqueFileName = null;
@@ -186,7 +186,7 @@ namespace EmployeeManagement.Controllers
                 string fullPath = Path.Combine(imgs, uniqueFileName);
 
                 using var stream = new FileStream(fullPath, FileMode.Create);
-                await model.Photo.CopyToAsync(stream);
+                await model.Photo.CopyTo(stream);
 
             }
 
