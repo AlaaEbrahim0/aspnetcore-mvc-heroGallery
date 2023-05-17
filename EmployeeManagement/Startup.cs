@@ -62,7 +62,6 @@ namespace EmployeeManagement
                     .AddDefaultTokenProviders();
 
 
-
             services.ConfigureApplicationCookie(options =>
             {
                 options.AccessDeniedPath = new PathString("/Adminstration/AccessDenied");
@@ -90,8 +89,8 @@ namespace EmployeeManagement
             services.AddAuthentication()
               .AddGoogle(options =>
               {
-                  options.ClientId = "133457337525-vm4ne12nifb0ilrreuba2g5p09d90qui.apps.googleusercontent.com";
-                  options.ClientSecret = "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";
+                  options.ClientId = _config["GoogleClientId"];
+                  options.ClientSecret = _config["GoogleClientSecret"];
 
               });
 
