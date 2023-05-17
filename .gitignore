@@ -16,7 +16,12 @@
 # Mono auto generated files
 mono_crash.*
 
-# Build results
+EmployeeManagement\appsettings.json
+EmployeeManagement\appsettings.Development.json
+EmployeeManagement\Properties
+
+
+# Build resultss
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
