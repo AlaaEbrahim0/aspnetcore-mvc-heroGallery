@@ -22,10 +22,9 @@ namespace EmployeeManagement.Controllers
         private readonly IEmployeeRepository _repository;
         private readonly IWebHostEnvironment webHostEnvironment;
         private readonly ILogger logger;
-        private readonly IDataProtector protector;
 
         public HomeController(IEmployeeRepository repository, IWebHostEnvironment webHostEnvironment, 
-            ILogger<HomeController>logger, IDataProtectionProvider dataProtectionProvider, DataProtectionPurposeStrings dataProtectionPurposeStrings)
+            ILogger<HomeController>logger)
         {
             _repository = repository;
             this.webHostEnvironment = webHostEnvironment;
@@ -83,7 +82,7 @@ namespace EmployeeManagement.Controllers
         {
             if (ModelState.IsValid)
             {
-                string uniqueFileName = ProcessUploadedFileAsync(model);
+                string uniqueFileName = ProcessUploadedFile(model);
 
                 Employee newEmployee = new Employee()
                 {
@@ -147,7 +146,7 @@ namespace EmployeeManagement.Controllers
                         string path = Path.Combine(webHostEnvironment.WebRootPath, "imgs", model.ExistingPhotoPath);
                         System.IO.File.Delete(path);
                     }
-                    employee.PhotoPath = ProcessUploadedFileAsync(model);
+                    employee.PhotoPath = ProcessUploadedFile(model);
                 }
 
                 _repository.UpdateEmployee(employee);
@@ -172,7 +171,7 @@ namespace EmployeeManagement.Controllers
             return RedirectToAction("Index");
         }
 
-        private string ProcessUploadedFileAsync(EmployeeCreateViewModel model)
+        private string ProcessUploadedFile(EmployeeCreateViewModel model)
         {
             var photo = model.Photo;
             string uniqueFileName = null;
@@ -186,7 +185,7 @@ namespace EmployeeManagement.Controllers
                 string fullPath = Path.Combine(imgs, uniqueFileName);
 
                 using var stream = new FileStream(fullPath, FileMode.Create);
-                await model.Photo.CopyTo(stream);
+                model.Photo.CopyTo(stream);
 
             }
 
