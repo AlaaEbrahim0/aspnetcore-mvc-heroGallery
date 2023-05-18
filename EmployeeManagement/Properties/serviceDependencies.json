@@ -4,6 +4,10 @@
       "ignored": "true",
       "type": "mssql",
       "connectionId": "ConnectionStrings:EmployeeDbProductionConnection"
+    },
+    "mssql3": {
+      "type": "mssql",
+      "connectionId": "EmployeeDbConnection"
     }
   }
 }
