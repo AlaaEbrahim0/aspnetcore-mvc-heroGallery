@@ -4,6 +4,16 @@
     ViewBag.Title = "Employees List";
 }
 
+<style>
+    img:hover {
+        transform: scale(1.2); /* Scale the image by 10% on hover */
+    }
+    
+    img {
+        transition: transform 0.3s ease-in-out; /* Add a smooth transition to the transform property */
+    }
+</style>
+
 <div class="row justify-content-center">
     @for (int i = 0; i < Model.Count; ++i)
     {
@@ -22,10 +32,10 @@
 
                 <div class="card-footer text-center">
                     <a asp-controller="home" asp-action="details" , asp-route-id="@Model[i].Id"
-                       class="btn btn-primary m-1">View</a>
-                    <a asp-controller="Home" asp-action="Edit" asp-route-id="@Model[i].Id" class="btn btn-primary m-1">Edit</a>
+                       class="btn btn-outline-secondary m-1">View</a>
+                    <a asp-controller="Home" asp-action="Edit" asp-route-id="@Model[i].Id" class="btn btn-outline-secondary m-1">Edit</a>
                     <button asp-route-id="@Model[i].Id"
-                            class="btn btn-danger m-1" data-bs-toggle="modal"
+                            class="btn btn-outline-danger m-1" data-bs-toggle="modal"
                             data-bs-target="#delete-modal-@Model[i].Id">
                         Delete
                     </button>
