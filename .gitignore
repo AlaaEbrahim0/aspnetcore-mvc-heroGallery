@@ -368,3 +368,5 @@ FodyWeavers.xsd
 /EmployeeManagement/appsettings.json
 /EmployeeManagement/libman.json
 /EmployeeManagement/appsettings.Development.json
+/EmployeeManagement/Properties/launchSettings.json
+

@@ -5,10 +5,16 @@
 	var returnUrl = Context.Request.Query["ReturnUrl"];
 }
 
+<style>
+	button
+	{
+		width: auto;
+	}
+</style>
 
 
 <div class="row">
-	<div class="col-md-6">
+	<div class="col-md-6 offset-md-3">
 		<h3 class="mt-2 mb-2">Local Account Login</h3>
 		<hr />
 		<form method="post" enctype="multipart/form-data" asp-controller="Account" asp-action="Login" asp-route-returnUrl = "@returnUrl">
@@ -41,35 +47,26 @@
 				<a asp-action="ForgotPassword">Forget Password?</a>
 			</div>
 		</form>
+
+
+		<div class="d-flex justify-content-center">
+			<form method="post" asp-action="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl">
+				<div>
+					@foreach (var provider in Model.ExternalLogins)
+					{
+						<button type="submit" class="btn btn-outline-primary"
+								name="provider" value="@provider.Name"
+								title="Logging using your @provider.DisplayName account">
+							<i class="bi bi-google"></i> @provider.DisplayName
+						</button>
+					}
+				</div>
+			</form>
+		</div>
+	
+		
 	</div>
 
-	<div class="col-md-6">
-		<h3 class="mt-2 mb-2">External Login</h3>
-		<hr />
-		@{
-			if (Model.ExternalLogins.Count == 0)
-			{
-				<div>No external logins configured</div>
-			}
-			else
-			{
-				<form method="post" asp-action="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl">
-					<div> 
-						@foreach (var provider in Model.ExternalLogins)
-						{
-							<button type="submit" class="btn btn-primary" 
-									name="provider" value="@provider.Name"
-									title ="Logging using your @provider.DisplayName account">
-									@provider.DisplayName
-							</button>
-						}
-					</div>
-				</form>
-			}
-
-		}
-
-	</div>
 </div>
 
 
