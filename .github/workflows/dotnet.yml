@@ -1,31 +1,43 @@
-# This workflow will build a .NET project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
-
-name: .NET
+name: Publish 🚀
 
 on:
+  workflow_dispatch:
   push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+    branches:
+    - master
+
+env:
+  AZURE_WEBAPP_NAME: emp_system
+  AZURE_WEBAPP_PACKAGE_PATH: "./publish"
 
 jobs:
-  build:
-
+  publish:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        node_version: ['8', '10', '12']
         os: [ubuntu-latest, windows-latest, macOS-latest]
-
+    
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 6.0.x
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+      - uses: actions/checkout@v3
+      
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '6.0.x'
+          
+      - name: Restore
+        run: dotnet restore ./EmployeeManagement.sln
+        
+      - name: Build
+        run: dotnet build ./EmployeeManagement.sln --configuration Release --no-restore
+        
+      - name: Publish
+        run: dotnet publish ./EmployeeManagement.sln --configuration Release --no-build --output '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
+        
+      - name: Deployment
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
+          package: "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
