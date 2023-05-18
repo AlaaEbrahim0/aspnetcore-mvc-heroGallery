@@ -367,3 +367,4 @@ MigrationBackup/
 FodyWeavers.xsd
 /EmployeeManagement/appsettings.json
 /EmployeeManagement/libman.json
+/EmployeeManagement/appsettings.Development.json
