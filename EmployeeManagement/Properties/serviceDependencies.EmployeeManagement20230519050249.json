@@ -2,10 +2,9 @@
   "dependencies": {
     "mssql1": {
       "secretStore": "AzureAppSettings",
-      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourcegroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/finalserverplease/databases/EmployeeManagement_db",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/finalserverplease/databases/EmployeeManagement_db",
       "type": "mssql.azure",
-      "connectionId": "ConnectionStrings:DefualtConnection",
-      "dynamicId": null
+      "connectionId": "ConnectionStrings:EmployeeDbConnection"
     }
   }
 }
