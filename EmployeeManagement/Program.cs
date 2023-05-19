@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using NLog.Extensions.Logging;
 
 namespace EmployeeManagement
 {
@@ -26,7 +25,6 @@ namespace EmployeeManagement
                 logging.AddConsole();
                 logging.AddDebug();
                 logging.AddEventSourceLogger();
-                logging.AddNLog();
             })
             .ConfigureWebHostDefaults(webBuilder =>
             {

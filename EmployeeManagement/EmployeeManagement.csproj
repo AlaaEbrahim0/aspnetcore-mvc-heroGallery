@@ -4,6 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
 	  <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
 	  <UserSecretsId>0bbdcf74-7ce9-4ebe-8567-38895ae004b4</UserSecretsId>
+	  <ApplicationInsightsResourceId>/subscriptions/477b1c88-96d8-43cf-ad2c-ffd37283394f/resourceGroups/Group/providers/microsoft.insights/components/EmployeeManagement20230519050249</ApplicationInsightsResourceId>
 
   </PropertyGroup>
 
@@ -16,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.15.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.15" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.13" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.16" />
@@ -25,7 +27,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="NLog.Web.AspNetCore" Version="5.2.1" />
   </ItemGroup>
 
 </Project>
