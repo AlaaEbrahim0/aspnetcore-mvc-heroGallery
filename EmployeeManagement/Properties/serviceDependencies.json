@@ -1,9 +1,13 @@
 {
   "dependencies": {
     "mssql1": {
+      "ignored": "true",
       "type": "mssql",
-      "connectionId": "ConnectionStrings:EmployeeDbConnection",
-      "dynamicId": null
+      "connectionId": "ConnectionStrings:EmployeeDbProductionConnection"
+    },
+    "mssql3": {
+      "type": "mssql",
+      "connectionId": "EmployeeDbConnection"
     }
   }
 }

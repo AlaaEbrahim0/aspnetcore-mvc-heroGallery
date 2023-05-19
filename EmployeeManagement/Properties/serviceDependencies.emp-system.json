@@ -1,11 +1,13 @@
 {
   "dependencies": {
-    "mssql1": {
+    "mssql2": {
+      "ignored": "true",
+      "type": "mssql",
+      "connectionId": "ConnectionStrings:EmployeeDbConnection"
+    },
+    "mssql3": {
       "secretStore": "AzureAppSettings",
-      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/empsqlserverdb/databases/EmployeeManagement_db",
       "type": "mssql.azure",
-      "connectionId": "ConnectionStrings:EmployeeDbConnection",
-      "dynamicId": null
     }
   }
 }
