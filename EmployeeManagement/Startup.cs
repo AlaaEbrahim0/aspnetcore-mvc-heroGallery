@@ -99,7 +99,6 @@ namespace EmployeeManagement
 
               });
 
-
 			services.AddDbContextPool<AppDbContext>(
                 options => options.UseSqlServer(_config.GetConnectionString("EmployeeDbConnection")));
 
