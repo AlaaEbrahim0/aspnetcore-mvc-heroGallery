@@ -1,10 +1,10 @@
-name: Build and deploy .NET Core application to Web App emp-system
+name: Build and deploy .NET Core application to Web App EmployeeManagement20230519050249
 on:
   push:
     branches:
-    - master
+    - development
 env:
-  AZURE_WEBAPP_NAME: emp-system
+  AZURE_WEBAPP_NAME: EmployeeManagement20230519050249
   AZURE_WEBAPP_PACKAGE_PATH: EmployeeManagement/published
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 6.0.x
@@ -44,5 +44,5 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ secrets.emp_system_AF6B }}
+        publish-profile: ${{ secrets.EmployeeManagement20230519050249_18FE }}
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
