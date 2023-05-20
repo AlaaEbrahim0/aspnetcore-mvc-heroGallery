@@ -17,7 +17,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.EnvironmentVariables;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using NLog.Filters;
 
 namespace EmployeeManagement
 {
@@ -98,7 +97,6 @@ namespace EmployeeManagement
                   options.ClientSecret = _config["GoogleClientSecret"];
 
               });
-
 
 			services.AddDbContextPool<AppDbContext>(
                 options => options.UseSqlServer(_config.GetConnectionString("EmployeeDbConnection")));
