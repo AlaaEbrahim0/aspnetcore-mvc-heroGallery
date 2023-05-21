@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Operations;
 using Microsoft.Extensions.DependencyModel.Resolution;
 using Microsoft.Extensions.Logging;
 
@@ -42,7 +43,6 @@ namespace EmployeeManagement.Controllers
             var employeeList = _repository.GetAllEmployees().ToList();
             return View(employeeList);
         }
-
 
 		// [Route("{id?}")]
 		[AllowAnonymous]
