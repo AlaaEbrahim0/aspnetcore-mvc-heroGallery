@@ -3,18 +3,25 @@ using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.Extensions.Configuration;
 
 namespace EmployeeManagement.Utilites
 {
     public class EmailSender : IEmailSender
     {
+        private readonly IConfiguration config;
+
+        public EmailSender(IConfiguration config)
+        {
+            this.config = config;
+        }
         public async Task SendEmailAsync(string recipientEmail, string subject, string message)
         {
             
             var senderEmail = new MailAddress("employee.management.system.ems@gmail.com", "Employee Management System");
             var receiverEmail = new MailAddress(recipientEmail, "Receiver");
 
-            var password = "pptxdpulejtpevjf";
+            var password = config["SenderEmailPass"];
             var smtp = new SmtpClient
             {
                 Host = "smtp.gmail.com",

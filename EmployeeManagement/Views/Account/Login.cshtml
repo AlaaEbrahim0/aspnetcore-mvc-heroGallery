@@ -15,7 +15,7 @@
 
 <div class="row">
 	<div class="col-md-6 offset-md-3">
-		<h3 class="mt-2 mb-2">Local Account Login</h3>
+		<h3 class="mt-2 mb-2 text-white">Login</h3>
 		<hr />
 		<form method="post" enctype="multipart/form-data" asp-controller="Account" asp-action="Login" asp-route-returnUrl = "@returnUrl">
 			<div class="form-group">
@@ -41,7 +41,7 @@
 
 			<div asp-validation-summary="All" class="text-danger"></div>
 
-			<button type="submit" class="btn btn-primary">Login</button>
+			<button type="submit" class="btn btn-outline-secondary">Login</button>
 
 			<div class="mt-3">
 				<a asp-action="ForgotPassword">Forget Password?</a>

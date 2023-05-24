@@ -5,7 +5,7 @@
 }
 
 <form method="post" asp-controller="adminstration" asp-action="ManageUserClaims" asp-route-userId="@Model.UserId">
-	<div class="card">
+	<div class="card mt-3">
 		<div class="card-header">
 			<h2>Manage User Claims</h2>
 		</div>
@@ -27,8 +27,8 @@
 		<div asp-validation-summary="All"></div>
 
 		<div class="card-footer">
-			<button type="submit" class="btn btn-primary w-auto">Update</button>
-			<a asp-controller="adminstration" class="btn btn-primary w-auto" asp-action="EditUser" asp-route-id="@Model.UserId">Cancel</a>
+			<button type="submit" class="btn btn-outline-primary w-auto">Update</button>
+			<a asp-controller="adminstration" class="btn btn-outline-primary w-auto" asp-action="EditUser" asp-route-id="@Model.UserId">Cancel</a>
 		</div>
 
 	</div>

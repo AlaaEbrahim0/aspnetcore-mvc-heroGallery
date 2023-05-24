@@ -22,7 +22,7 @@
 	<div asp-validation-summary="All" class="text-danger"></div>
 
 	<div class="form-group">
-		<button type="submit" class="btn btn-primary">Update</button>
+		<button type="submit" class="btn btn-outline-primary">Update</button>
 		<a asp-controller="adminstration" asp-action="RolesList" class="btn btn-danger">Cancel</a>
 	</div>
 
@@ -47,7 +47,7 @@
 		</div>
 
 		<div class="card-footer">
-			<a asp-controller="adminstration" asp-action="EditUsersInRole" asp-route-roleId ="@Model.Id" class="btn btn-primary" style="width:auto">Add or Remove Users</a>
+			<a asp-controller="adminstration" asp-action="EditUsersInRole" asp-route-roleId ="@Model.Id" class="btn btn-outline-primary" style="width:auto">Add or Remove Users</a>
 		</div>
 	</div>
 </form>

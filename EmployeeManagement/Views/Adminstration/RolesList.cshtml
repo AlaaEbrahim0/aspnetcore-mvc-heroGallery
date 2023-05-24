@@ -7,12 +7,10 @@
     ViewBag.Title = "Roles List";
 }
 
-<h1>All Roles</h1>
-
 
 @if (Model.Any())
 {    
-    <a asp-action="CreateRole" asp-controller="Adminstration" class="btn btn-secondary mb-3" style="width:auto">Add New Role</a>
+    <a asp-action="CreateRole" asp-controller="Adminstration" class="btn btn-outline-secondary my-3" style="width:auto">Add New Role</a>
 
     foreach(var role in Model)
     {
@@ -31,12 +29,12 @@
 
                 @if ((await authorizationService.AuthorizeAsync(User, "EditRolePolicy")).Succeeded)
                 {
-                    <a asp-controller="adminstration" asp-action="EditRole" asp-route-id="@role.Id" class="btn btn-primary">Edit</a>
+                    <a asp-controller="adminstration" asp-action="EditRole" asp-route-id="@role.Id" class="btn btn-outline-primary">Edit</a>
                 }
 
                 @if ((await authorizationService.AuthorizeAsync(User, "DeleteRolePolicy")).Succeeded)
                 {
-                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-modal-@role.Id">Delete</button>
+                    <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#delete-modal-@role.Id">Delete</button>
                 }
 
 
@@ -57,9 +55,9 @@
                         </div>
                         <div class="modal-footer">
                             <form method="post" asp-action="DeleteRole" asp-controller="adminstration" asp-route-id="@role.Id">
-								<button type="submit" class="btn btn-danger" data-bs-dismiss="modal">Yes</button>
+								<button type="submit" class="btn btn-outline-danger" data-bs-dismiss="modal">Yes</button>
                             </form>
-                            <button class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                            <button class="btn btn-outline-secondary" data-bs-dismiss="modal">No</button>
                         </div>
                     </div>
                 </div>
@@ -79,7 +77,7 @@ else
                 Use the button below to create a new role
             </h5>
 
-                <a class="btn btn-primary" style="width:auto" asp-action="CreateRole" asp-controller="Adminstration">Create Role</a>
+                <a class="btn btn-outline-primary" style="width:auto" asp-action="CreateRole" asp-controller="Adminstration">Create Role</a>
             }
         </div>
     </div>    

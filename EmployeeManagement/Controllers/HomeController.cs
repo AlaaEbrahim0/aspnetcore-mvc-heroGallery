@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using EmployeeManagement.Models;
 using EmployeeManagement.Security;
@@ -24,8 +26,8 @@ namespace EmployeeManagement.Controllers
         private readonly IWebHostEnvironment webHostEnvironment;
         private readonly ILogger logger;
 
-        public HomeController(IEmployeeRepository repository, IWebHostEnvironment webHostEnvironment, 
-            ILogger<HomeController>logger)
+        public HomeController(IEmployeeRepository repository, IWebHostEnvironment webHostEnvironment,
+            ILogger<HomeController> logger)
         {
             _repository = repository;
             this.webHostEnvironment = webHostEnvironment;
@@ -33,21 +35,48 @@ namespace EmployeeManagement.Controllers
         }
 
 
-        // [Route("")]
-        // [Route("~/")]
-        // [Route("~/Home")]
+        //[Route("")]
+        //[Route("~/")]
+        //[Route("~/Home")]
         [AllowAnonymous]
         [HttpGet]
-        public ViewResult Index()
+        public ActionResult Index()
         {
-            var employeeList = _repository.GetAllEmployees().ToList();
-            return View(employeeList);
+            var viewModel = new IndexSearchViewModel
+            {
+                SearchQuery = ""
+            };
+
+            return View(viewModel);
+        }
+        
+        [AllowAnonymous]
+        [HttpPost]
+        public ActionResult Index(IndexSearchViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                return RedirectToAction("List", new { query = model.SearchQuery });
+            }
+            return View(model);
         }
 
-		// [Route("{id?}")]
-		[AllowAnonymous]
+        [HttpGet]
+        [AllowAnonymous]
+        public ViewResult List(string query = "")
+        {
+            var employeeList = _repository.GetAllEmployees();
+            if (query != "")
+            {
+                employeeList = employeeList.Where(e => e.Name.ToLower().Contains(query.ToLower()));
+            }
+            return View(employeeList.ToList());
+        }
 
-		public ViewResult Details(int? id)
+        // [Route("{id?}")]
+        [AllowAnonymous]
+        [HttpGet]
+        public ViewResult Details(int? id)
         {
 
             Employee employee = _repository.GetEmployee(id.Value);
@@ -76,9 +105,9 @@ namespace EmployeeManagement.Controllers
         }
 
         [HttpPost]
-		[Authorize]
+        [Authorize]
 
-		public ActionResult Create(EmployeeCreateViewModel model)
+        public ActionResult Create(EmployeeCreateViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -102,9 +131,9 @@ namespace EmployeeManagement.Controllers
         //-----------------------------------------------------------------------
 
         [HttpGet]
-		[Authorize]
+        [Authorize]
 
-		public ViewResult Edit(int? id)
+        public ViewResult Edit(int? id)
         {
             Employee employee = _repository.GetEmployee(id.Value);
             if (employee == null)
@@ -127,17 +156,17 @@ namespace EmployeeManagement.Controllers
         }
 
         [HttpPost]
-		[Authorize]
+        [Authorize]
 
-		public IActionResult Edit(EmployeeEditViewModel model)
+        public IActionResult Edit(EmployeeEditViewModel model)
         {
             if (ModelState.IsValid)
             {
-                Employee employee   = _repository.GetEmployee(model.Id);
-                employee.Name       = model.Name;
-                employee.Email      = model.Email;
+                Employee employee = _repository.GetEmployee(model.Id);
+                employee.Name = model.Name;
+                employee.Email = model.Email;
                 employee.Department = model.Department;
-                employee.Gender     = model.Gender;
+                employee.Gender = model.Gender;
 
                 if (model.Photo != null)
                 {

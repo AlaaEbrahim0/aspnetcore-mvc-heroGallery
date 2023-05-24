@@ -109,9 +109,6 @@ namespace EmployeeManagement.Controllers
 					var confirmationLink = Url.Action("ConfirmEmail", "Account",
 						new { userId = user.Id, token = emailConfirmationToken }, Request.Scheme);
 
-					logger.Log(LogLevel.Warning, confirmationLink);
-
-
 					if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
 					{
 						return RedirectToAction("UsersList", "Adminstration");
