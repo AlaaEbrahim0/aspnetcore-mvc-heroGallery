@@ -5,11 +5,30 @@
 }
 
 
-<div class="landing">
-    <div class="landing-text">
-        <h3>Anime Hub</h3>
-        <p>Discover Awesome Anime Characters with Our Demo Web App</p>
-    </div>
+
+
+<style>
+    img:hover {
+        transform: scale(1.2); /* Scale the image by 10% on hover */
+    }
+    
+    img {
+        transition: transform 0.3s ease-in-out; /* Add a smooth transition to the transform property */
+    }
+</style>
+
+
+<div class="row justify-content-center">
+    @for (int i = 0; i < Model.Count; ++i)
+    {
+        var photoPath = "~/imgs/" + (Model[i].PhotoPath ?? "profile.jpg");
+
+        <div class="card-container">
+            <div id="hero-card" class="card m-3 col-3-sm">
+
+                <div class="card-header">
+                    <h3>@Model[i].Name</h3>
+                </div>
 
 </div>
 <div class="search-box mb-5">

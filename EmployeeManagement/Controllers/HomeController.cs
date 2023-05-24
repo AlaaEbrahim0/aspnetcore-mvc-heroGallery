@@ -25,9 +25,9 @@ namespace EmployeeManagement.Controllers
         private readonly IEmployeeRepository _repository;
         private readonly IWebHostEnvironment webHostEnvironment;
         private readonly ILogger logger;
-
-        public HomeController(IEmployeeRepository repository, IWebHostEnvironment webHostEnvironment,
-            ILogger<HomeController> logger)
+        
+        public HomeController(IEmployeeRepository repository, IWebHostEnvironment webHostEnvironment, 
+            ILogger<HomeController>logger)
         {
             _repository = repository;
             this.webHostEnvironment = webHostEnvironment;
