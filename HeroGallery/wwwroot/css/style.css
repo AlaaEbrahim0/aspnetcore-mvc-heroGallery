@@ -12,6 +12,11 @@
     rgba(83, 147, 184, 1) 38%,
     rgba(0, 212, 255, 1) 100%
   );
+  --gradient-dark-blue: linear-gradient(
+    135.8deg,
+    var(--dark-primary) 40.1%,
+    rgb(28, 46, 63) 77.5%
+  );
 }
 
 * {

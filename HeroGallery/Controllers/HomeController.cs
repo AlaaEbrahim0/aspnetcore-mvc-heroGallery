@@ -63,6 +63,14 @@ namespace HeroManagement.Controllers
 
         [HttpGet]
         [AllowAnonymous]
+        public ViewResult ABC()
+        {
+            return View();
+        }
+
+
+        [HttpGet]
+        [AllowAnonymous]
         public ViewResult List(int? page, string query = "")
         {
             int pageSize = 12;
@@ -80,15 +88,15 @@ namespace HeroManagement.Controllers
                 pageNumber = 1;
             }
 
-            var paginatedData = HeroList.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
-            var pagination = new Pagination<Hero>(paginatedData, pageNumber, pageSize, totalCount, totalPages);
-
-            return View(pagination);
             if (query != "")
             {
                 HeroList = HeroList.Where(e => e.Name.ToLower().Contains(query.ToLower()));
             }
-            return View(HeroList.ToList());
+
+            var paginatedData = HeroList.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+            var pagination = new Pagination<Hero>(paginatedData, pageNumber, pageSize, totalCount, totalPages);
+
+            return View(pagination);
         }
 
         // [Route("{id?}")]
