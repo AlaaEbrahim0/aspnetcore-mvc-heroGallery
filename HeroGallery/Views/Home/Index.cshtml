@@ -1,0 +1,23 @@
+@model IndexSearchViewModel
+
+@{
+    ViewBag.Title = "Heros List";
+}
+
+
+<div class="landing">
+    <div class="landing-text">
+        <h3>Hero Gallery</h3>
+        <p style="font-weight: 100;">Discover Awesome Anime Characters with Our Demo Web App</p>
+    </div>
+
+</div>
+<div class="search-box mb-5">
+    <form method="post" asp-action="List" >
+        <div class="form-group">
+            <input type="text" class="form-control" asp-for="SearchQuery">
+			<span asp-validation-for="SearchQuery"></span>
+        </div>
+        <button asp-route-query="@Model.SearchQuery" type="submit" class="btn btn-outline-primary"><i class="bi bi-search"></i></button>
+    </form>
+</div>
