@@ -1,4 +1,4 @@
-@model List<Employee>
+@model IndexSearchViewModel
 
 @{
     ViewBag.Title = "Employees List";
@@ -30,55 +30,13 @@
                     <h3>@Model[i].Name</h3>
                 </div>
 
-                <div class="card-body">
-                    <a asp-action="details" asp-route-id="@Model[i].Id"><img class="card-img img-fluid mx-auto" style="padding:5%; height:300px;" src="@photoPath" asp-append-version="true"></a>
-                </div>
-
-                <div class="card-footer text-center">
-                    <a asp-controller="home" asp-action="details" , asp-route-id="@Model[i].Id"
-                       class="btn btn-outline-secondary m-1">View</a>
-                    <a asp-controller="Home" asp-action="Edit" asp-route-id="@Model[i].Id" class="btn btn-outline-secondary m-1">Edit</a>
-                    <button asp-route-id="@Model[i].Id"
-                            class="btn btn-outline-danger m-1" data-bs-toggle="modal"
-                            data-bs-target="#delete-modal-@Model[i].Id">
-                        Delete
-                    </button>
-
-                    <div class="modal fade" id="delete-modal-@Model[i].Id">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5>Delete Confirmation</h5>
-                                    <button type="button"
-                                            class="close"
-                                            data-bs-dismiss="modal"
-                                            aria-label="Close"
-                                            data-bs-target="#modal"></button>
-
-                                </div>
-
-                                <div class="modal-body">
-                                    Are you sure you want to remove employee: @Model[i].Name
-                                    <br>
-                                    <span class="font-weight-bold">@Model[i].Id</span>
-                                </div>
-
-                                <div class="modal-footer">
-                                    <form method="post" asp-controller="home" asp-action="Delete" asp-route-id="@Model[i].Id">
-                                        <button type="submit" class="btn btn-danger" data-bs-dismiss="modal">Yes</button>
-                                    </form>
-                                    <button class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
+</div>
+<div class="search-box mb-5">
+    <form method="post" asp-action="List" >
+        <div class="form-group">
+            <input type="text" class="form-control" asp-for="SearchQuery">
+			<span asp-validation-for="SearchQuery"></span>
         </div>
-
-        
-    }
-    
+        <button asp-route-query="@Model.SearchQuery" type="submit" class="btn btn-outline-primary"><i class="bi bi-search"></i></button>
+    </form>
 </div>

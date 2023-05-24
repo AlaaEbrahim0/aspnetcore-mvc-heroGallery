@@ -45,10 +45,10 @@
 
             <div class="card-footer text-center">
 
-                <a asp-controller="home" asp-action="index" class="btn btn-primary">Back</a>
-                <a asp-controller="Home" asp-action="Edit" asp-route-id="@Model.Employee.Id" class="btn btn-primary m-1">Edit</a>
+                <a asp-controller="home" asp-action="index" class="btn btn-outline-secondary">Back</a>
+                <a asp-controller="Home" asp-action="Edit" asp-route-id="@Model.Employee.Id" class="btn btn-outline-primary m-1">Edit</a>
                 <button asp-route-id="@Model.Employee.Id"
-                        class="btn btn-danger m-1" data-bs-toggle="modal"
+                        class="btn btn-outline-danger m-1" data-bs-toggle="modal"
                         data-bs-target="#delete-modal-@Model.Employee.Id">
                     Delete
                 </button>
@@ -74,7 +74,7 @@
 
                             <div class="modal-footer">
                                 <form method="post" asp-controller="home" asp-action="Delete" asp-route-id="@Model.Employee.Id">
-                                    <button type="submit" class="btn btn-danger" data-bs-dismiss="modal">Yes</button>
+                                    <button type="submit" class="btn btn-outline-danger" data-bs-dismiss="modal">Yes</button>
                                 </form>
                                 <button class="btn btn-secondary" data-bs-dismiss="modal">No</button>
 
