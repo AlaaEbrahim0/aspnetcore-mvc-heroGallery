@@ -4,6 +4,11 @@
       "type": "mssql",
       "connectionId": "ConnectionStrings:HeroDbProductionConnection",
       "dynamicId": null
+    },
+    "mssql2": {
+      "type": "mssql",
+      "connectionId": "ConnectionStrings:HeroDbAzureProductionConnection",
+      "dynamicId": null
     }
   }
 }
