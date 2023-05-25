@@ -37,6 +37,7 @@ namespace HeroManagement.Controllers
             return View();
         }
 
+
         [HttpGet]
         public IActionResult UsersList(int? page)
         {
