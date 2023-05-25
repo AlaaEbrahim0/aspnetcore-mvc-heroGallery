@@ -1,4 +1,4 @@
-    using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -99,7 +99,7 @@ namespace HeroManagement
               });
 
 			services.AddDbContextPool<AppDbContext>(
-                options => options.UseSqlServer(_config.GetConnectionString("HeroDbConnection")));
+                options => options.UseSqlServer(_config.GetConnectionString("HeroDbAzureProductionConnection")));
 
         }
 

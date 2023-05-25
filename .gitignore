@@ -16,9 +16,6 @@
 # Mono auto generated files
 mono_crash.*
 
-EmployeeManagement\appsettings.json
-EmployeeManagement\appsettings.Development.json
-
 
 # Build resultss
 [Dd]ebug/
@@ -365,8 +362,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-/EmployeeManagement/appsettings.json
 /EmployeeManagement/libman.json
 /EmployeeManagement/appsettings.Development.json
 /EmployeeManagement/Properties/launchSettings.json
-
