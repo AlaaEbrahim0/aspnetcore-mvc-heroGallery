@@ -85,7 +85,6 @@ namespace HeroManagement.Controllers
             {
                 HeroList = HeroList.Where(e => e.Name.ToLower().Contains(query.ToLower()));
             }
-
             var paginatedData = HeroList.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
             var pagination = new Pagination<Hero>(paginatedData, pageNumber, pageSize, totalCount, totalPages);
 
