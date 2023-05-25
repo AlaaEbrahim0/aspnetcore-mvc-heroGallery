@@ -54,6 +54,7 @@ namespace HeroManagement.Controllers
 
         [AllowAnonymous]
         [HttpPost]
+
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl)
         { 
             model.ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
