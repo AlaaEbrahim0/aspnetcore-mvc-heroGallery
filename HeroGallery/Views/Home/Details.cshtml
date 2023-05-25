@@ -1,0 +1,107 @@
+
+@model HomeDetailsViewModel
+
+@{
+    ViewBag.Title = "Hero Info";
+    var photoPath = "~/imgs/" + (Model.Hero.PhotoPath ?? "profile.jpg");
+}
+
+<style>
+    .card-body{
+        color: rgba(165, 165, 165, 0.705);
+        font-weight: 200;
+        background: linear-gradient(to bottom, rgb(0, 0, 0) 50%, var(--red-primary));
+    }
+    p{
+        padding: 20px;
+    }
+</style>
+
+
+<div class="row justify-content-center m-3">
+    <div class="col-sm-8">
+        <div class="card">
+
+            <div class="card-header">
+                <h1>@Model.Hero.Name</h1>
+            </div>  
+
+            <div class="card-i"></div>
+            <div class="card-body text-center">
+                <img class="card-img-top imageThumbnail mb-3" src="@photoPath" asp-append-version="true">
+
+				<p>@Model.Hero.Description</p>
+
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td>Hero ID</td>
+                            <td>@Model.Hero.Id</td>
+                        </tr>
+                        <tr>
+                            <td>Name</td>
+                            <td>@Model.Hero.Name</td>
+                        </tr>
+                        <tr>
+                            <td>Gender</td>
+                            <td>@Model.Hero.Gender</td>
+                        </tr>
+
+                        <tr>
+                            <td>Power</td>
+                            <td>@Model.Hero.Power</td>
+                        </tr>
+
+                        <tr>
+                            <td>Series</td>
+                            <td>@Model.Hero.Series</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card-footer text-center">
+
+                <a asp-controller="home" asp-action="List" class="btn btn-outline-secondary">Back</a>
+                <a asp-controller="Home" asp-action="Edit" asp-route-id="@Model.Hero.Id" class="btn btn-outline-primary m-1">Edit</a>
+                <button asp-route-id="@Model.Hero.Id"
+                        class="btn btn-outline-danger m-1" data-bs-toggle="modal"
+                        data-bs-target="#delete-modal-@Model.Hero.Id">
+                    Delete
+                </button>
+
+                <div class="modal fade" id="delete-modal-@Model.Hero.Id">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5>Delete Confirmation</h5>
+                                <button type="button"
+                                        class="close"
+                                        data-bs-dismiss="modal"
+                                        aria-label="Close"
+                                        data-bs-target="#modal"></button>
+
+                            </div>
+
+                            <div class="modal-body">
+                                Are you sure you want to delete role:
+                                <br>
+                                <span class="font-weight-bold">@Model.Hero.Id</span>
+                            </div>
+
+                            <div class="modal-footer">
+                                <form method="post" asp-controller="home" asp-action="Delete" asp-route-id="@Model.Hero.Id">
+                                    <button type="submit" class="btn btn-outline-danger" data-bs-dismiss="modal">Yes</button>
+                                </form>
+                                <button class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    

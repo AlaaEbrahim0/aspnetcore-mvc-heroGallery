@@ -1,0 +1,93 @@
+﻿@model Pagination<ApplicationUser>
+
+@{
+	ViewBag.Title = "Data List";
+}
+
+<h1>Data List</h1>
+
+<style>
+	.card-body{
+		background-color: #000000;
+background-image: linear-gradient(147deg, #000000 40%, #292929 74%);
+	}
+</style>
+
+
+@if (Model.Data.Any())
+{
+	<a class="btn btn-outline-primary mt-3 mb-3" style="width:auto" asp-controller="Account" asp-action="Register">Add New User</a>
+
+	<nav aria-label="Page navigation example">
+		<ul class="pagination">
+			<li class="page-item @(!Model.HasPreviousPage ? "disabled" : "")"><a class="page-link"
+			   asp-controller="adminstration" asp-action="UsersList" asp-route-page="@(Model.PageNumber-1)">Previous</a>
+			</li> 
+			@for (int i = 1; i <= Model.TotalPages; ++i)
+			{
+				<li class="page-item @(Model.PageNumber == i ? "active": "" )"><a class="page-link" 
+					asp-controller="adminstration" asp-action="UsersList" asp-route-page = "@i"> @i</a></li>
+			}
+			<li class="page-item @(!Model.HasNextPage ? "disabled" : "")">
+				<a class="page-link"
+			   asp-controller="adminstration" asp-action="UsersList" asp-route-page="@(Model.PageNumber+1)">Next</a>
+		</ul>
+	</nav>
+	
+	@foreach(var user in Model.Data)
+	{
+		<div class="card mb-3">
+			<div class="card-header">
+				User ID: @user.Id
+			</div>
+
+			<div class="card-body">
+				<h5 class="card-title">@user.UserName</h5>
+			</div>
+
+			<div class="card-footer">
+				<a asp-controller="adminstration" asp-action="EditUser" asp-route-id="@user.Id" class="btn btn-outline-primary">Edit</a>
+				<button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#delete-modal-@user.Id">Delete</button>
+			</div>
+
+			<div class="modal" id="delete-modal-@user.Id">
+				<div class="modal-dialog modal-dialog-centered">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5>Delete Confirmation</h5>
+						</div>
+						<div class="modal-body">
+							Are you sure you want to delete user:
+							<br />
+							<span class="font-weight-bold">@user.Id</span>
+						</div>
+						<div class="modal-footer">
+							<form method="post" asp-action="DeleteUser" asp-controller="adminstration" asp-route-id="@user.Id">
+								<button type="submit" class="btn btn-outline-danger" data-bs-dismiss="modal">Yes</button>
+							</form>
+							<button class="btn btn-outline-secondary" data-bs-dismiss="modal">No</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	}
+}
+else
+{
+	<div class="card">
+		<div class="card-header">
+			No Data created yet
+		</div>
+
+		<div class="card-body">
+			<h5>Use the button below to create a user</h5>
+			<a class="btn btn-outline-primary" style="width:auto" asp-controller="Account" asp-action="Register">Add New User</a>
+		</div>
+
+	</div>
+}
+
+@section Scripts{
+	<script src="~/js/customscript.js"></script>
+}

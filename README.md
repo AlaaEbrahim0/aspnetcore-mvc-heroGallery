@@ -1,43 +1,41 @@
-# Employee Management System
+Hero Gallery
+============
 
-This project is an Employee Management System built using ASP.NET Core, Entity Framework Core, HTML, CSS, JS, Bootstrap, and jQuery. The purpose of this system is to manage employee data, including personal information, employment information, and salary information.
+This project is a Hero Gallery built using ASP.NET Core, Entity Framework Core, HTML, CSS, JS, Bootstrap, and jQuery. The purpose of this system is to manage hero data, including personal information, abilities, and power levels.
 
-
-## Prerequisites
-
-To run this project, you must have the following software installed:
-
-*   .NET Core SDK
-*   Visual Studio Code or Visual Studio
-
-## Getting Started
+Getting Started
+---------------
 
 Clone the repository:
 
-    git clone https://github.com/alaaebrahim0/employee-management.git
+Copy
+
+```
+git clone https://github.com/alaaebrahim0/hero-gallery.git
+
+```
 
 Open the project in your preferred IDE (Visual Studio or Visual Studio Code)
-
+Modifiy The Connnection Strings
+Update-Database
 Build and run the project
 
-## Features
+Features
+--------
+-   Membership System
+-   CRUD operations
+-   Pagination
+-   Responsive UI
+-   Logging and Error Handling
 
-*   Membership System
-*   CRUD operations
-*   Responsive UI
-*   Logging and Error Handling
-
-## Technologies Used
-
-*   ASP.NET Core
-*   Entity Framework Core
-*   HTML
-*   CSS
-*   JS
-*   Bootstrap
-*   jQuery
-*   SQL Server
-
-## Acknowledgments
-
-This project was developed as a part of the "Kudvenkat" YouTube channel's ASP.NET Core tutorial series. Thank you to "Kudvenkat" for the valuable lessons and tutorials.
+Technologies Used
+-----------------
+-   C#
+-   ASP.NET Core MVC
+-   Entity Framework Core
+-   HTML
+-   CSS
+-   JS
+-   Bootstrap
+-   jQuery
+-   SQL Server
