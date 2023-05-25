@@ -61,13 +61,6 @@ namespace HeroManagement.Controllers
             return View(model);
         }
 
-        [HttpGet]
-        [AllowAnonymous]
-        public ViewResult ABC()
-        {
-            return View();
-        }
-
 
         [HttpGet]
         [AllowAnonymous]
