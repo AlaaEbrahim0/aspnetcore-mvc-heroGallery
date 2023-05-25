@@ -99,7 +99,7 @@ namespace HeroManagement
               });
 
 			services.AddDbContextPool<AppDbContext>(
-                options => options.UseSqlServer(_config.GetConnectionString("HeroDbProductionConnection")));
+                options => options.UseSqlServer(_config.GetConnectionString("HeroDbAzureProductionConnection")));
 
         }
 
