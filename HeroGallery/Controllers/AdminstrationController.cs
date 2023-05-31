@@ -17,6 +17,7 @@ using Microsoft.Extensions.Logging;
 
 namespace HeroManagement.Controllers
 {
+    [Authorize(Roles = "Admin, Super Admin")]
     public class AdminstrationController : Controller
     {
         private readonly RoleManager<IdentityRole> roleManager;
@@ -39,6 +40,7 @@ namespace HeroManagement.Controllers
 
 
         [HttpGet]
+
         public IActionResult UsersList(int? page)
         {
             int pageSize = 3;
@@ -64,7 +66,7 @@ namespace HeroManagement.Controllers
             return View(pagination);
         }
 
-    
+        
 
 
         [HttpGet]
@@ -290,7 +292,7 @@ namespace HeroManagement.Controllers
                     ModelState.AddModelError("", error.Description);
                 }
             }
-
+            
             return View(model);
         }
         [HttpPost]
@@ -303,6 +305,26 @@ namespace HeroManagement.Controllers
                 ViewBag.ErrorMessage = $"User with ID = {id} cannot be found";
                 return View("StatusCodeError");
             }
+
+            var userRoles = await userManager.GetRolesAsync(user);
+            var userClaims = await userManager.GetClaimsAsync(user);
+            var userLogins = await userManager.GetLoginsAsync(user);
+            if (userRoles != null)
+            {
+                await userManager.RemoveFromRolesAsync(user, userRoles);
+            }
+
+            if (userClaims != null)
+            {
+                await userManager.RemoveClaimsAsync(user, userClaims);
+            }
+
+            foreach(var login in userLogins)
+            {
+                await userManager.RemoveLoginAsync(user, login.LoginProvider, login.ProviderKey);
+            }
+
+
             var result = await userManager.DeleteAsync(user);
             if (result.Succeeded)
             {

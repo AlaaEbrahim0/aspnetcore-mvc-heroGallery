@@ -18,7 +18,7 @@ namespace HeroManagement.Utilites
         public async Task SendEmailAsync(string recipientEmail, string subject, string message)
         {
             
-            var senderEmail = new MailAddress("Hero.management.system.ems@gmail.com", "Hero Management System");
+            var senderEmail = new MailAddress("employee.management.system.ems@gmail.com", "Hero Management System");
             var receiverEmail = new MailAddress(recipientEmail, "Receiver");
 
             var password = config["SenderEmailPass"];

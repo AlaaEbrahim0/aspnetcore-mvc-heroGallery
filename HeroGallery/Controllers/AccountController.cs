@@ -22,14 +22,16 @@ namespace HeroManagement.Controllers
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly ILogger<AccountController> logger;
         private readonly IEmailSender emailSender;
+        private readonly RoleManager<IdentityRole> roleManager;
 
         public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager,
-            ILogger<AccountController> logger, IEmailSender emailSender)
+            ILogger<AccountController> logger, IEmailSender emailSender, RoleManager<IdentityRole> roleManager)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.logger = logger;
             this.emailSender = emailSender;
+            this.roleManager = roleManager;
         }
 
 
@@ -101,6 +103,7 @@ namespace HeroManagement.Controllers
                     City = model.City
                 };
 
+
                 var result = await userManager.CreateAsync(user, model.Password);
 
                 if (result.Succeeded)
@@ -110,12 +113,23 @@ namespace HeroManagement.Controllers
                     var confirmationLink = Url.Action("ConfirmEmail", "Account",
                         new { userId = user.Id, token = emailConfirmationToken }, Request.Scheme);
 
+                    var subject = "Confirming Your Email Address";
+
+                    var message = $"Dear {user.UserName},\r\n\r\n" +
+                        $"Thank you for signing up for our service! " +
+                        $"To complete the registration process, we need to verify your email address. " +
+                        $"Please click the link below to confirm your email:\r\n\r\n{confirmationLink}\r\n\r\n" +
+                        $"If you did not sign up for this service, please ignore this email.\r\n\r\nThank you,";
+
+                    await emailSender.SendEmailAsync(user.Email, subject, message);
+
+                    await userManager.AddToRoleAsync(user, "User");
+
                     if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
                     {
                         return RedirectToAction("UsersList", "Adminstration");
                     }
 
-                    ViewBag.ConfirmationLink = confirmationLink;
                     return View("SuccessfulRegisteration");
                 }
 
@@ -161,7 +175,7 @@ namespace HeroManagement.Controllers
             var properites = signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
             return new ChallengeResult(provider, properites);
         }
-
+        
         [AllowAnonymous]
         public async Task<IActionResult> ExternalLoginCallBack(string returnUrl = null, string remoteError = null)
         {
@@ -237,6 +251,8 @@ namespace HeroManagement.Controllers
 
                         await userManager.CreateAsync(user);
 
+                        await userManager.AddToRoleAsync(user, "User");
+
                         var emailConfirmationToken = await userManager.GenerateEmailConfirmationTokenAsync(user);
 
                         var confirmationLink = Url.Action("ConfirmEmail", "Account",
@@ -252,7 +268,6 @@ namespace HeroManagement.Controllers
 
                         await emailSender.SendEmailAsync(email, subject, message);
 
-                        ViewBag.ConfirmationLink = confirmationLink;
                         return View("SuccessfulRegisteration");
                     }
 
@@ -267,7 +282,6 @@ namespace HeroManagement.Controllers
 
                 return View("Error");
             }
-
 
         }
 		

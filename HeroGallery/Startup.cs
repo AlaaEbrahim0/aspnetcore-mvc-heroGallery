@@ -95,11 +95,10 @@ namespace HeroManagement
               {
                   options.ClientId = _config["GoogleClientId"];
                   options.ClientSecret = _config["GoogleClientSecret"];
-
               });
 
-			services.AddDbContextPool<AppDbContext>(
-                options => options.UseSqlServer(_config.GetConnectionString("HeroDbAzureProductionConnection")));
+            services.AddDbContextPool<AppDbContext>(
+                options => options.UseSqlServer(_config.GetConnectionString("HeroDbConnection")));
 
         }
 
@@ -120,12 +119,12 @@ namespace HeroManagement
 
             app.UseAuthentication();
 
-			app.UseMvc(routes =>
-			{
-				routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
-			});
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
+            });
 
 
-		}
+        }
     }
 }
