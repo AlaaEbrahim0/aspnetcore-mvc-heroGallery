@@ -107,7 +107,6 @@ body {
   position: absolute;
   top: 56px;
   left: 0;
-  z-index: -1;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -197,4 +196,8 @@ table {
 
 .custom-select {
   background-color: transparent;
+}
+
+.parent {
+  background-color: black;
 }

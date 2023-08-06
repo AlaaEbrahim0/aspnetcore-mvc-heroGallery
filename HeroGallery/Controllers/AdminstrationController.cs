@@ -50,7 +50,6 @@ namespace HeroManagement.Controllers
             var users = userManager.Users.OrderBy(x => x.UserName).ToList();
             var totalCount = users.Count;
 
-
             int totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
 
             if (pageNumber > totalPages)

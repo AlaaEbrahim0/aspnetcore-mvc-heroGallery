@@ -18,7 +18,7 @@ namespace HeroManagement.ViewModel
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-
+        
         [Required]
         [DataType(DataType.Password)]
         [Display(Name = "Confirm Password")]

@@ -18,76 +18,78 @@
 
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg bg-dark navbar-dark" style="width:100%">
-        <div class="container-fluid">
-            <a class="navbar-brand" asp-controller="Home" asp-action="Index">
-                HERO GALLERY
-            </a>
-            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#collapsibleNavbar">
-				<span class="navbar-toggler-icon"></span> 
-            </button>
-                <div class="collapse navbar-collapse" id="collapsibleNavbar">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a asp-controller="Home" asp-action="List" class="nav-link">LIST</a>
-                    </li>
-                    <li class="nav-item">
-                        <a asp-controller="Home" asp-action="Create" class="nav-link">CREATE</a>
-                    </li>
-
-                    @if (signInManager.IsSignedIn(User) && (User.IsInRole("Admin") || User.IsInRole("Super Admin")))
-                    {   
-                        <li class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" id="navbarDarkDropdownMenuLink" data-toggle="dropdown"
-                               aria-haspopup="true" aria-expanded="false" role="button">
-                                MANAGE
-                            </a>
-
-                            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-								<li>
-                                    <a asp-controller="Adminstration" asp-action="UsersList" class="dropdown-item">USERS</a>
-                                </li>
-
-                                <li>
-                                    <a asp-controller="Adminstration" asp-action="RolesList" class="dropdown-item">ROLES</a>
-                                </li>
-                            </ul>
-                        </li>
-
-                    }
-
-                </ul>
-
-				<ul class="navbar-nav ml-auto">
-                    @if (signInManager.IsSignedIn(User))
-                    {
+    <div class="parent">
+        <nav class="navbar navbar-expand-lg bg-dark navbar-dark" style="width:100%">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+                    HERO GALLERY
+                </a>
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#collapsibleNavbar">
+                    <span class="navbar-toggler-icon"></span> 
+                </button>
+                    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-							<form method="post" asp-controller="Account" asp-action="Logout">
-                                <button type="submit" class="nav-link btn btn-link py-0" style="width:auto">
-                                    LOGOUT <b>@User.Identity.Name</b>
-                                </button>
-                            </form>
+                            <a asp-controller="Home" asp-action="List" class="nav-link">LIST</a>
                         </li>
-                    }
-                    else
-                    {
                         <li class="nav-item">
-                            <a asp-controller="Account" asp-action="Login" class="nav-link">LOGIN</a>
+                            <a asp-controller="Home" asp-action="Create" class="nav-link">CREATE</a>
                         </li>
 
-                        <li class="nav-item">
-                            <a asp-controller="Account" asp-action="Register" class="nav-link">REGISTER</a>
-                        </li>
-                    }
-                    
-                </ul>
+                        @if (signInManager.IsSignedIn(User) && (User.IsInRole("Admin") || User.IsInRole("Super Admin")))
+                        {   
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" id="navbarDarkDropdownMenuLink" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false" role="button">
+                                    MANAGE
+                                </a>
+
+                                <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                                    <li>
+                                        <a asp-controller="Adminstration" asp-action="UsersList" class="dropdown-item">USERS</a>
+                                    </li>
+
+                                    <li>
+                                        <a asp-controller="Adminstration" asp-action="RolesList" class="dropdown-item">ROLES</a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                        }
+
+                    </ul>
+
+                    <ul class="navbar-nav ml-auto">
+                        @if (signInManager.IsSignedIn(User))
+                        {
+                            <li class="nav-item">
+                                <form method="post" asp-controller="Account" asp-action="Logout">
+                                    <button type="submit" class="nav-link btn btn-link py-0" style="width:auto">
+                                        LOGOUT <b>@User.Identity.Name</b>
+                                    </button>
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a asp-controller="Account" asp-action="Login" class="nav-link">LOGIN</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a asp-controller="Account" asp-action="Register" class="nav-link">REGISTER</a>
+                            </li>
+                        }
+                        
+                    </ul>
+                </div>
             </div>
-         </div>
-    </nav>
+        </nav>
 
-    <div class="container">
-        <div >
-            @RenderBody()
+        <div class="container">
+            <div >
+                @RenderBody()
+            </div>
         </div>
     </div>
     <!-- Optional JavaScript -->

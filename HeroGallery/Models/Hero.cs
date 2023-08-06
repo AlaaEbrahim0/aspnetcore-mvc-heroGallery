@@ -25,7 +25,7 @@ namespace HeroManagement.Models
         public string Description { get; set; }
 
         [Required]
-        public string PhotoPath { get; set; }
+        public string? PhotoPath { get; set; }
 
 
 

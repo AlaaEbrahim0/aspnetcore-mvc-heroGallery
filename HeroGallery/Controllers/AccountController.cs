@@ -58,7 +58,7 @@ namespace HeroManagement.Controllers
         [HttpPost]
 
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl)
-        { 
+        {
             model.ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
             if (ModelState.IsValid)
@@ -175,14 +175,14 @@ namespace HeroManagement.Controllers
             var properites = signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
             return new ChallengeResult(provider, properites);
         }
-        
+
         [AllowAnonymous]
         public async Task<IActionResult> ExternalLoginCallBack(string returnUrl = null, string remoteError = null)
         {
             //If the returnUrl is null redirect the uset to the home page
-            returnUrl = returnUrl ?? Url.Content("~/");
+            returnUrl ??= Url.Content("~/");
 
-            LoginViewModel model = new LoginViewModel
+            LoginViewModel model = new ()
             {
                 ReturnUrl = returnUrl,
                 ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList()
@@ -284,7 +284,7 @@ namespace HeroManagement.Controllers
             }
 
         }
-		
+
         [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> ConfirmEmail(string userId, string token)
@@ -335,7 +335,7 @@ namespace HeroManagement.Controllers
                         new { email = model.Email, token = token }, Request.Scheme);
 
                     var subject = "Reset Your Password";
-
+ 
                     var message = $"Dear {user.UserName},\r\n\r\n" +
                         $"We received a request to reset your password. If you did not make this request, please ignore this email.\r\n\r\n" +
                         $"To reset your password, please click the link below:\r\n\r\n{passwordResetLink}\r\n\r\n" +
