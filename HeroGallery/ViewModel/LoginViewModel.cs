@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
@@ -20,9 +21,9 @@ namespace HeroManagement.ViewModel
         [Display(Name = "Remember Me")]
         public bool RememberMe { get; set; }
 
-        public string ReturnUrl { get; set; }
+        public string ReturnUrl { get; set; } = "/";
 
-        public IList<AuthenticationScheme> ExternalLogins { get; set; }
+        public IList<AuthenticationScheme> ExternalLogins { get; set; } = new List<AuthenticationScheme>();
 
     }
 }

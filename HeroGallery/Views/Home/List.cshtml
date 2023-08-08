@@ -69,7 +69,9 @@ else
                         </div>
 
                         <div class="card-body">
-                            <a asp-action="details" asp-route-id="@Model.Data[i].Id"><img class="card-img img-fluid mx-auto"src="@photoPath" asp-append-version="true"></a>
+                            <a asp-action="details" asp-route-id="@Model.Data[i].Id">
+                                <img class="card-img img-fluid mx-auto"src="@photoPath" asp-append-version="true">
+                             </a>
                         </div>
 
                         <div class="card-footer text-center">
@@ -77,9 +79,10 @@ else
                                class="btn btn-outline-secondary m-1">View</a>
                                 <a asp-controller="Home" asp-action="Edit" asp-route-id="@Model.Data[i].Id" class="btn btn-outline-secondary m-1">Edit</a>
                                 <button asp-route-id="@Model.Data[i].Id"
-                                class="btn btn-outline-danger m-1" data-bs-toggle="modal"
-                                        data-bs-target="#delete-modal-@Model.Data[i].Id">
-                                Delete
+                                    class="btn btn-outline-danger m-1" 
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#delete-modal-@Model.Data[i].Id">
+                                    Delete
                                 </button>
 
                                 <div class="modal fade" id="delete-modal-@Model.Data[i].Id">

@@ -48,7 +48,7 @@ namespace HeroManagement.Controllers
         {
             var model = new LoginViewModel
             {
-                ReturnUrl = returnUrl,
+                ReturnUrl = returnUrl ?? "/",
                 ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList()
             };
             return View(model);

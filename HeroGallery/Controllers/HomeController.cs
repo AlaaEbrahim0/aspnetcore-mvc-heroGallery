@@ -53,11 +53,11 @@ namespace HeroManagement.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public ActionResult Index(IndexSearchViewModel model)
+        public ActionResult Index(IndexSearchViewModel? model)
         {
             if (ModelState.IsValid)
             {
-                return RedirectToAction("List", new { query = model.SearchQuery });
+                return RedirectToAction("List", new { query = model?.SearchQuery });
             }
             return View(model);
         }
@@ -215,7 +215,7 @@ namespace HeroManagement.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize(Roles = "Superadmin")]
 
         public IActionResult Delete(int id)
         {

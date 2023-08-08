@@ -2,7 +2,6 @@
 
 @{
 	ViewBag.Title = "User Login";
-	var returnUrl = Context.Request.Query["ReturnUrl"];
 }
 
 <style>
@@ -31,7 +30,7 @@
 	<div class="col-md-6 offset-md-3">
 		<h3 class="mt-2 mb-2 text-white">Login</h3>
 		<hr />
-		<form method="post" enctype="multipart/form-data" asp-controller="Account" asp-action="Login" asp-route-returnUrl = "@returnUrl">
+		<form method="post" enctype="multipart/form-data" asp-controller="Account" asp-action="Login" asp-route-returnUrl = "@Model.ReturnUrl">
 			<div class="form-group">
 				<label class="form-label" asp-for="Email"></label>
 				<input class="form-control" asp-for="Email" />
@@ -53,7 +52,7 @@
 				</div>
 			</div>
 
-			<div asp-validation-summary="All" class="text-danger"></div>
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
 			<button type="submit" class="btn btn-outline-secondary">Login</button>
 

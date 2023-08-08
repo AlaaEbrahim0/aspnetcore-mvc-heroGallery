@@ -36,7 +36,7 @@ namespace HeroManagement.Models
 
         public IEnumerable<Hero> GetAllHeros()
         {
-            return context.Heros;
+            return context.Heros.AsNoTracking();
         }
 
         public Hero GetHero(int Id)
