@@ -39,4 +39,3 @@ Technologies Used
 -   Bootstrap
 -   jQuery
 -   SQL Server
--   Azure
