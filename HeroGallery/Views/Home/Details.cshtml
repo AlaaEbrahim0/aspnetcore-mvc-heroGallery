@@ -65,7 +65,8 @@
                 <a asp-controller="home" asp-action="List" class="btn btn-outline-secondary">Back</a>
                 <a asp-controller="Home" asp-action="Edit" asp-route-id="@Model.Hero.Id" class="btn btn-outline-primary m-1">Edit</a>
                 <button asp-route-id="@Model.Hero.Id"
-                        class="btn btn-outline-danger m-1" data-bs-toggle="modal"
+                        class="btn btn-outline-danger m-1" 
+                        data-bs-toggle="modal"
                         data-bs-target="#delete-modal-@Model.Hero.Id">
                     Delete
                 </button>
@@ -84,7 +85,7 @@
                             </div>
 
                             <div class="modal-body">
-                                Are you sure you want to delete role:
+                                Are you sure you want to delete hero: @Model.Hero.Name
                                 <br>
                                 <span class="font-weight-bold">@Model.Hero.Id</span>
                             </div>
@@ -104,4 +105,4 @@
     </div>
 </div>
 
-    
+ 

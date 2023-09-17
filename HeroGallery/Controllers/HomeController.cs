@@ -115,6 +115,7 @@ namespace HeroManagement.Controllers
             return View(viewModel);
 
         }
+
         [HttpGet]
         [Authorize]
         public ViewResult Create()
@@ -217,7 +218,7 @@ namespace HeroManagement.Controllers
                 ViewBag.ErrorMessage = $"Hero with ID = {id} cannot be found";
                 return View("StatusCodeError");
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("List");
         }
 
         private string ProcessUploadedFile(HeroCreateViewModel model)
