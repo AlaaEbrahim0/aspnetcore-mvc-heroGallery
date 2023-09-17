@@ -10,7 +10,6 @@
         <h3>Hero Gallery</h3>
         <p style="font-weight: 100;">Discover Awesome Anime Characters with Our Demo Web App</p>
     </div>
-
 </div>
 <div class="search-box mb-5">
     <form method="post" asp-action="List" >
@@ -18,6 +17,11 @@
             <input type="text" class="form-control" asp-for="SearchQuery">
 			<span asp-validation-for="SearchQuery"></span>
         </div>
+<<<<<<< HEAD
         <button asp-route-query="@Model.SearchQuery" type="submit" class="btn btn-outline-primary"><i class="bi bi-search"></i>Search</button>
+=======
+        <button asp-route-query="@Model.SearchQuery" type="submit" class="btn btn-outline-primary"><i class="bi bi-search"></i> Search</button>
+>>>>>>> master
     </form>
 </div>
+`

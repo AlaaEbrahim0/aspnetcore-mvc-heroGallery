@@ -2,14 +2,27 @@
 
 @{
 	ViewBag.Title = "User Login";
-	var returnUrl = Context.Request.Query["ReturnUrl"];
 }
 
 <style>
-	button
+	.btn-outline-secondary
 	{
-		width: auto;
+		filter: saturate(0);
+		background-color: transparent;
+		transition: filter .4s ease-in-out ;
 	}
+	.btn-outline-secondary:hover{
+		filter: saturate(1);
+	}
+	.ex-login{
+		flex-wrap: nowrap;
+	}
+	
+	.ex-login .btn-google{
+		width: 100%;
+	}
+	
+	
 </style>
 
 
@@ -17,7 +30,7 @@
 	<div class="col-md-6 offset-md-3">
 		<h3 class="mt-2 mb-2 text-white">Login</h3>
 		<hr />
-		<form method="post" enctype="multipart/form-data" asp-controller="Account" asp-action="Login" asp-route-returnUrl = "@returnUrl">
+		<form method="post" enctype="multipart/form-data" asp-controller="Account" asp-action="Login" asp-route-returnUrl = "@Model.ReturnUrl">
 			<div class="form-group">
 				<label class="form-label" asp-for="Email"></label>
 				<input class="form-control" asp-for="Email" />
@@ -39,7 +52,7 @@
 				</div>
 			</div>
 
-			<div asp-validation-summary="All" class="text-danger"></div>
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
 			<button type="submit" class="btn btn-outline-secondary">Login</button>
 
@@ -49,24 +62,25 @@
 		</form>
 
 
-		<div class="d-flex justify-content-center">
+		<div class="ex-login">
 			<form method="post" asp-action="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl">
-				<div>
-					@foreach (var provider in Model.ExternalLogins)
-					{
-						<button type="submit" class="btn btn-outline-primary"
-								name="provider" value="@provider.Name"
-								title="Logging using your @provider.DisplayName account">
-							<i class="bi bi-google"></i> @provider.DisplayName
-						</button>
-					}
-				</div>
+			<div>
+				@foreach (var provider in Model.ExternalLogins)
+				{
+					<button type="submit" class="btn btn-outline-secondary btn-google mt-3"
+							name="provider" value="@provider.Name"
+							title="Logging using your @provider.DisplayName account">
+							<img width="30" height="30" src="https://img.icons8.com/color/48/google-logo.png" alt="google-logo" />
+					</button>
+				}
+			</div>
 			</form>
 		</div>
+	</div>
 	
 		
-	</div>
-
 </div>
+
+
 
 

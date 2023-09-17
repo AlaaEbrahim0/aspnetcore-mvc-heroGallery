@@ -6,11 +6,24 @@
 
 <style>
     img:hover {
+<<<<<<< HEAD
         transform: scale(1.1); /* Scale the image by 10% on hover */
+=======
+        transform: scale(1.15); /* Scale the image by 10% on hover */
+    }
+
+    .card-img{
+        max-width: 100%;
+        width: auto;
+>>>>>>> master
     }
 
     img {
         transition: transform 0.3s ease-in-out; /* Add a smooth transition to the transform property */
+        display: block;
+        max-height: 250px;
+        max-width: 200px;
+        height: auto;
     }
 
     .add .btn{
@@ -61,7 +74,9 @@ else
                         </div>
 
                         <div class="card-body">
-                            <a asp-action="details" asp-route-id="@Model.Data[i].Id"><img class="card-img img-fluid mx-auto" style="padding:5%; height:300px;" src="@photoPath" asp-append-version="true"></a>
+                            <a asp-action="details" asp-route-id="@Model.Data[i].Id">
+                                <img class="card-img img-fluid mx-auto"src="@photoPath" asp-append-version="true">
+                             </a>
                         </div>
 
                         <div class="card-footer text-center">
@@ -73,7 +88,11 @@ else
                                     class="btn btn-outline-danger m-1" 
                                     data-bs-toggle="modal"
                                     data-bs-target="#delete-modal-@Model.Data[i].Id">
+<<<<<<< HEAD
                                 Delete
+=======
+                                    Delete
+>>>>>>> master
                                 </button>
 
 

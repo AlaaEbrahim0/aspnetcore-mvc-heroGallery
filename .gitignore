@@ -362,6 +362,3 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-/EmployeeManagement/libman.json
-/EmployeeManagement/appsettings.Development.json
-/EmployeeManagement/Properties/launchSettings.json

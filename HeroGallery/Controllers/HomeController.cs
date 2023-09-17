@@ -12,6 +12,7 @@ using HeroManagement.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Operations;
 using Microsoft.Extensions.DependencyModel.Resolution;
@@ -52,11 +53,11 @@ namespace HeroManagement.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public ActionResult Index(IndexSearchViewModel model)
+        public ActionResult Index(IndexSearchViewModel? model)
         {
             if (ModelState.IsValid)
             {
-                return RedirectToAction("List", new { query = model.SearchQuery });
+                return RedirectToAction("List", new { query = model?.SearchQuery });
             }
             return View(model);
         }
@@ -66,7 +67,7 @@ namespace HeroManagement.Controllers
         [AllowAnonymous]
         public ViewResult List(int? page, string query = "")
         {
-            int pageSize = 12;
+            int pageSize = 18;
             int pageNumber = page ?? 1;
 
 
@@ -125,27 +126,34 @@ namespace HeroManagement.Controllers
 
         [HttpPost]
         [Authorize]
-
         public ActionResult Create(HeroCreateViewModel model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                string uniqueFileName = ProcessUploadedFile(model);
-
-                Hero newHero = new Hero
+                if (ModelState.IsValid)
                 {
-                    Name = model.Name,
-                    Gender = model.Gender,
-                    Description = model.Description,
-                    Power = model.Power,
-                    Series = model.Series,
-                    PhotoPath = uniqueFileName
-                };
+                    string uniqueFileName = ProcessUploadedFile(model);
 
-                _repository.AddHero(newHero);
-                return RedirectToAction("details", new { id = newHero.Id });
+                    Hero newHero = new Hero
+                    {
+                        Name = model.Name,
+                        Gender = model.Gender,
+                        Description = model.Description,
+                        Power = model.Power,
+                        Series = model.Series,
+                        PhotoPath = uniqueFileName
+                    };
+
+                    _repository.AddHero(newHero);
+                    return RedirectToAction("details", new { id = newHero.Id });
+                }
+                return View(model);
+
             }
-            return View(model);
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 
         //-----------------------------------------------------------------------
@@ -208,7 +216,7 @@ namespace HeroManagement.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize(Roles = "Superadmin")]
 
         public IActionResult Delete(int id)
         {
