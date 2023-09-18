@@ -1,13 +1,15 @@
 {
   "dependencies": {
-    "mssql1": {
-      "type": "mssql",
-      "connectionId": "ConnectionStrings:HeroDbProductionConnection",
-      "dynamicId": null
-    },
     "mssql2": {
+      "ignored": "true",
       "type": "mssql",
       "connectionId": "ConnectionStrings:HeroDbAzureProductionConnection",
+      "dynamicId": null
+    },
+    "mssql1": {
+      "ignored": "true",
+      "type": "mssql",
+      "connectionId": "ConnectionStrings:HeroDbProductionConnection",
       "dynamicId": null
     }
   }
