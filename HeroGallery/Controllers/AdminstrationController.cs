@@ -1,23 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Metadata;
-using System.Runtime.InteropServices;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using HeroManagement.Models;
-using HeroManagement.Utilites;
 using HeroManagement.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Microsoft.Extensions.Logging;
 
 namespace HeroManagement.Controllers
 {
-    [Authorize(Roles = "Admin, Super Admin")]
+	[Authorize(Roles = "Admin, Super Admin")]
     public class AdminstrationController : Controller
     {
         private readonly RoleManager<IdentityRole> roleManager;
@@ -59,8 +55,6 @@ namespace HeroManagement.Controllers
 
             var paginatedData = users.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
             var pagination = new Pagination<ApplicationUser>(paginatedData, pageNumber, pageSize, totalCount, totalPages);
-
-
 
             return View(pagination);
         }

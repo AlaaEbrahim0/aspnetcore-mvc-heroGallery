@@ -179,7 +179,7 @@ namespace HeroManagement.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> ExternalLoginCallBack(string returnUrl = null, string remoteError = null)
         {
-            //If the returnUrl is null redirect the uset to the home page
+            //If the returnUrl is null redirect the user to the home page
             returnUrl ??= Url.Content("~/");
 
             LoginViewModel model = new ()
@@ -260,13 +260,18 @@ namespace HeroManagement.Controllers
 
                         var subject = "Confirming Your Email Address";
 
-                        var message = $"Dear {info.Principal.FindFirstValue(ClaimTypes.Name)},\r\n\r\n" +
-                            $"Thank you for signing up for our service! " +
-                            $"To complete the registration process, we need to verify your email address. " +
-                            $"Please click the link below to confirm your email:\r\n\r\n{confirmationLink}\r\n\r\n" +
-                            $"If you did not sign up for this service, please ignore this email.\r\n\r\nThank you,";
+						var message =   $"<html style=\"padding: 20px;\">" +
+	                                    $"<body style=\"font-family: Arial, sans-serif;\">" +
+	                                    $"<p>Dear {info.Principal.FindFirstValue(ClaimTypes.Name)},</p>" +
+	                                    $"<p>Thank you for signing up for our service! To complete the registration process, we need to verify your email address.</p>" +
+	                                    $"<p>Please click the link below to confirm your email:</p>" +
+	                                    $"<p><a href=\"{confirmationLink}\">{confirmationLink}</a></p>" +
+	                                    $"<p>If you did not sign up for this service, please ignore this email.</p>" +
+	                                    $"<p>Thank you,</p>" +
+	                                    $"</body>" +
+	                                    $"</html>";
 
-                        await emailSender.SendEmailAsync(email, subject, message);
+						await emailSender.SendEmailAsync(email, subject, message);
 
                         return View("SuccessfulRegisteration");
                     }
@@ -289,6 +294,7 @@ namespace HeroManagement.Controllers
         [HttpGet]
         public async Task<IActionResult> ConfirmEmail(string userId, string token)
         {
+           
             if (userId == null || token == null)
             {
                 return RedirectToAction("index", "home");
@@ -310,6 +316,7 @@ namespace HeroManagement.Controllers
 
             ViewBag.ErrorMessage = "Email Cannot Be Confirmed";
             return View("ExceptionError");
+           
         }
 
         [HttpGet]
