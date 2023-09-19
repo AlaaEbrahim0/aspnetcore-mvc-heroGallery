@@ -216,7 +216,7 @@ namespace HeroManagement.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Superadmin")]
+        [Authorize(Roles = "Admin")]
 
         public IActionResult Delete(int id)
         {

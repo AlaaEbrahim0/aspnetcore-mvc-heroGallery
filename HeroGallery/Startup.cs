@@ -96,12 +96,7 @@ namespace HeroManagement
                   options.ClientId = _config["GoogleClientId"];
                   options.ClientSecret = _config["GoogleClientSecret"];
               });
-
-<<<<<<< HEAD
-			services.AddDbContextPool<AppDbContext>(
-=======
             services.AddDbContextPool<AppDbContext>(
->>>>>>> master
                 options => options.UseSqlServer(_config.GetConnectionString("HeroDbConnection")));
 
         }
