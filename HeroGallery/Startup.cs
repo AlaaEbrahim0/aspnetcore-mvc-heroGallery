@@ -1,7 +1,6 @@
 using System;
 using HeroGallery.Repositores;
 using HeroManagement.Models;
-using HeroManagement.Security;
 using HeroManagement.Utilites;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -68,17 +67,12 @@ namespace HeroManagement
                 options.AddPolicy("DeleteRolePolicy",
                     policy => policy.RequireClaim("Delete Role", "true"));
 
-                options.AddPolicy("EditRolePolicy",
-                    policy => policy.AddRequirements(new ManageAdminRolesAndClaimRequirement()));
-
+               
                 options.AddPolicy("AdminRolePolicy",
                     policy => policy.RequireRole("Admin"));
 
 
             });
-            services.AddSingleton<IAuthorizationHandler, CanEditOnlyOtherAdminRolesAndClaimHandler>();
-            services.AddSingleton<IAuthorizationHandler, SuperAdminHandler>();
-            services.AddSingleton<DataProtectionPurposeStrings>();
             services.AddTransient<IEmailSender, EmailSender>();
 
             services.Configure<DataProtectionTokenProviderOptions>(options =>

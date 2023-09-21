@@ -1,28 +1,20 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using HeroGallery.Repositores;
 using HeroManagement.Models;
-using HeroManagement.Security;
 using HeroManagement.ViewModel;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.Operations;
-using Microsoft.Extensions.DependencyModel.Resolution;
 using Microsoft.Extensions.Logging;
 
 namespace HeroManagement.Controllers
 {
-    // [Route("[controller]/[action]")]
-    public class HomeController : Controller
+	// [Route("[controller]/[action]")]
+	public class HomeController : Controller
     {
         private readonly IHeroRepository _repository;
         private readonly IWebHostEnvironment webHostEnvironment;
