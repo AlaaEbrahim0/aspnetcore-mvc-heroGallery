@@ -294,12 +294,11 @@ namespace HeroManagement.Controllers
         [HttpGet]
         public async Task<IActionResult> ConfirmEmail(string userId, string token)
         {
-           
+
             if (userId == null || token == null)
             {
                 return RedirectToAction("index", "home");
             }
-
             var user = await userManager.FindByIdAsync(userId);
 
             if (user == null)
