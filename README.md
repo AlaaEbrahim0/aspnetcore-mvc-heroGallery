@@ -12,12 +12,13 @@ Copy
 
 ```
 git clone https://github.com/alaaebrahim0/hero-gallery.git
-
 ```
 
 Open the project in your preferred IDE (Visual Studio or Visual Studio Code)
 Modifiy The Connnection Strings
+```
 Update-Database
+```
 Build and run the project
 
 Features
