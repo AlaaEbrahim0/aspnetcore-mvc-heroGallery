@@ -15,7 +15,7 @@ git clone https://github.com/alaaebrahim0/hero-gallery.git
 ```
 
 Open the project in your preferred IDE (Visual Studio or Visual Studio Code)
-Modifiy The Connnection Strings
+Modify Connnection String in *appsetting.json*
 ```
 Update-Database
 ```
