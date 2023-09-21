@@ -1,9 +1,8 @@
-﻿namespace HeroManagement.ViewModel
+﻿namespace HeroGallery.ViewModel;
+
+public class UserRolesViewModel
 {
-	public class UserRolesViewModel
-	{
-		public string RoleId { get; set; }
-		public string RoleName { get; set; }
-		public bool IsSelected { get; set; } = false;
-	}
+	public string RoleId { get; set; }
+	public string RoleName { get; set; }
+	public bool IsSelected { get; set; } = false;
 }

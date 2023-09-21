@@ -1,10 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Primitives;
+﻿namespace HeroGallery.Models;
 
-namespace HeroManagement.Models
+public class ApplicationUser : IdentityUser
 {
-	public class ApplicationUser: IdentityUser
-	{
-		public string? City { get; set; }
-	}
+	public string? City { get; set; }
 }

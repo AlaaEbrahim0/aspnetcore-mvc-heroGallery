@@ -1,12 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Mvc;
+﻿namespace HeroGallery.ViewModel;
 
-namespace HeroManagement.ViewModel
+public class ForgotPasswordViewModel
 {
-	public class ForgotPasswordViewModel
-	{
-		[Required]
-		[EmailAddress]
-		public string Email { get; set; }
-    }
+	[Required]
+	[EmailAddress]
+	public string Email { get; set; }
+
 }

@@ -1,8 +1,7 @@
-﻿namespace HeroManagement.ViewModel
+﻿namespace HeroGallery.ViewModel;
+
+public class UserClaim
 {
-	public class UserClaim
-	{
-        public string ClaimType { get; set; }
-        public bool IsSelected { get; set; }
-    }
+	public string ClaimType { get; set; }
+	public bool IsSelected { get; set; }
 }

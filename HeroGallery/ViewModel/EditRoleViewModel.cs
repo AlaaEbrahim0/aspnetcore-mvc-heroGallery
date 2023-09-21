@@ -1,16 +1,12 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿namespace HeroGallery.ViewModel;
 
-namespace HeroManagement.ViewModel
+public class EditRoleViewModel
 {
-	public class EditRoleViewModel
-	{
-        public string Id { get; set; }
+    public string Id { get; set; }
 
-		[Required(ErrorMessage = "Role name is required")]
-		public string RoleName { get; set; }
+	[Required(ErrorMessage = "Role name is required")]
+	public string RoleName { get; set; }
 
-		public List<string> Users { get; set; } = new();
+	public List<string> Users { get; set; } = new();
 
-    }
 }

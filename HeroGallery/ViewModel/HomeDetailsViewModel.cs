@@ -1,10 +1,7 @@
-using HeroManagement.Models;
+namespace HeroGallery.ViewModel;
 
-namespace HeroManagement.ViewModel
+public class HomeDetailsViewModel
 {
-    public class HomeDetailsViewModel
-    {
-        public Hero Hero{ get; set; }
-        public string PageTitle { get; set; }
-    }
+    public Hero Hero{ get; set; }
+    public string PageTitle { get; set; }
 }

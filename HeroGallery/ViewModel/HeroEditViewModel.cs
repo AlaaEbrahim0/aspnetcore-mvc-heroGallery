@@ -1,8 +1,7 @@
-﻿namespace HeroManagement.ViewModel
+﻿namespace HeroGallery.ViewModel;
+
+public class HeroEditViewModel : HeroCreateViewModel
 {
-    public class HeroEditViewModel : HeroCreateViewModel
-    {
-        public int Id { get; set; }
-        public string ExistingPhotoPath { get; set; }
-    }
+    public int Id { get; set; }
+    public string ExistingPhotoPath { get; set; }
 }

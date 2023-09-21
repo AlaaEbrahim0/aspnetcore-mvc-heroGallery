@@ -1,8 +1,7 @@
-﻿namespace HeroManagement.Models.Lookups
+﻿namespace HeroGallery.Models.Lookups;
+
+public enum Gender
 {
-    public enum Gender
-    {
-        Male,
-        Female
-    }
+    Male,
+    Female
 }

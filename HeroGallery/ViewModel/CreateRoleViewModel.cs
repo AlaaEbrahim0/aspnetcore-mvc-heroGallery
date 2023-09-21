@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace HeroManagement.ViewModel
+﻿namespace HeroGallery.ViewModel
 {
     public class CreateRoleViewModel
     {

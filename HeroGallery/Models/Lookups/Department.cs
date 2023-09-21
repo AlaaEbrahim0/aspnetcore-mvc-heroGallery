@@ -1,9 +1,8 @@
-﻿namespace HeroManagement.Models.Lookups
+﻿namespace HeroGallery.Models.Lookups;
+
+public enum Department
 {
-    public enum Department
-    {
-        IT,
-        HR,
-        PR
-    }
+	IT,
+	HR,
+	PR
 }

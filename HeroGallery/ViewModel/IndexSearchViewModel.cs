@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations;
+namespace HeroGallery.ViewModel;
 
 public class IndexSearchViewModel
 {

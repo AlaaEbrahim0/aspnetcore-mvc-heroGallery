@@ -1,29 +1,20 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Mvc;
+﻿namespace HeroGallery.ViewModel;
 
-namespace HeroManagement.ViewModel
+public class LoginViewModel
 {
-    public class LoginViewModel
-    {
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; }
+    [Required]
+    [EmailAddress]
+    public string Email { get; set; }
 
-        [Required]
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
-    
-        [Display(Name = "Remember Me")]
-        public bool RememberMe { get; set; }
+    [Required]
+    [DataType(DataType.Password)]
+    public string Password { get; set; }
 
-        public string ReturnUrl { get; set; } = "/";
+    [Display(Name = "Remember Me")]
+    public bool RememberMe { get; set; }
 
-        public IList<AuthenticationScheme> ExternalLogins { get; set; } = new List<AuthenticationScheme>();
+    public string ReturnUrl { get; set; } = "/";
 
-    }
+    public IList<AuthenticationScheme> ExternalLogins { get; set; } = new List<AuthenticationScheme>();
+
 }
