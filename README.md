@@ -1,7 +1,7 @@
 Hero Gallery
 ============
 
-This project is a Hero Gallery built using ASP.NET Core, Entity Framework Core, HTML, CSS, JS, Bootstrap, and jQuery. The purpose of this system is to manage hero data, including personal information, abilities, and power levels.
+The hero gallery project was built using ASP.NET Core, Entity Framework Core, SQL Server, HTML, CSS, JS, Bootstrap, and jQuery. The purpose of this system is to manage hero data, including personal information, abilities, and power levels.
 
 Getting Started
 ---------------
@@ -12,12 +12,13 @@ Copy
 
 ```
 git clone https://github.com/alaaebrahim0/hero-gallery.git
-
 ```
 
 Open the project in your preferred IDE (Visual Studio or Visual Studio Code)
-Modifiy The Connnection Strings
+Modify Connnection String in *appsetting.json*
+```
 Update-Database
+```
 Build and run the project
 
 Features
