@@ -31,6 +31,8 @@ Features
 -   Responsive UI
 -   Logging and Error Handling
 
+> **_NOTE:_**  Business logic is written in the controller due to the application size but it's considered a good practice and should've moved to services classes
+
 Technologies Used
 -----------------
 -   C#
