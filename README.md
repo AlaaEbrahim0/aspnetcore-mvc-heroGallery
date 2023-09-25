@@ -15,6 +15,8 @@ git clone https://github.com/alaaebrahim0/hero-gallery.git
 ```
 
 Open the project in your preferred IDE (Visual Studio or Visual Studio Code)
+Install .NET 6 SKD or Higher
+Install SQL Server
 Modify Connnection String in *appsetting.json*
 ```
 Update-Database
