@@ -1,5 +1,7 @@
 
 
+using HeroGallery.Extensions;
+
 namespace HeroGallery;
 
 public class Startup
@@ -17,49 +19,21 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddMvc(options =>
-        {
-            options.EnableEndpointRouting = false;
 
-            var policy = new AuthorizationPolicyBuilder()
-                            .RequireAuthenticatedUser()
-                            .Build();
-
-            options.Filters.Add(new AuthorizeFilter(policy));
-
-        });
+        ServiceExtensions.ConfigureMvc(services, _config);
+        ServiceExtensions.ConfigureAuthorization(services);
+        ServiceExtensions.ConfigureIdentity(services);
+        ServiceExtensions.ConfigureCors(services);
+        ServiceExtensions.ConfigureAuthentication(services, _config);
 
         services.AddScoped<IHeroRepository, SqlHeroRepository>();
 
-        services.AddIdentity<ApplicationUser, IdentityRole>(options =>
-        {
-            options.Password.RequiredLength = 10;
-            options.Password.RequiredUniqueChars = 3;
-            options.Password.RequireNonAlphanumeric = false;
-            options.Password.RequireUppercase = false;
-            options.SignIn.RequireConfirmedEmail = true;
-        })
-                .AddEntityFrameworkStores<AppDbContext>()
-                .AddDefaultTokenProviders();
-
-
+        
         services.ConfigureApplicationCookie(options =>
-        {
-            options.AccessDeniedPath = new PathString("/Adminstration/AccessDenied");
-        });
+            options.AccessDeniedPath = new PathString("/Adminstration/AccessDenied"));
+        
 
-        services.AddAuthorization(options =>
-        {
-            options.AddPolicy("DeleteRolePolicy",
-                policy => policy.RequireClaim("Delete Role", "true"));
-
-           
-            options.AddPolicy("AdminRolePolicy",
-                policy => policy.RequireRole("Admin"));
-
-
-        });
-        services.AddTransient<IEmailSender, EmailSender>();
+		services.AddTransient<IEmailSender, EmailSender>();
 
         services.Configure<DataProtectionTokenProviderOptions>(options =>
         {
@@ -67,25 +41,17 @@ public class Startup
         });
 
 
-        services.AddAuthentication()
-          .AddGoogle(options =>
-          {
-              options.ClientId = _config["GoogleClientId"];
-              options.ClientSecret = _config["GoogleClientSecret"];
-          });
-        services.AddDbContextPool<AppDbContext>(
-            options => options.UseSqlServer(_config.GetConnectionString("HeroDbConnection")));
-
+        
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP reqsuest pipeline.
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
         if (env.IsDevelopment())
-        {
             app.UseDeveloperExceptionPage();
+        
+        else
             app.UseHsts();
-        }
 
         app.UseExceptionHandler("/Error");
 
@@ -93,13 +59,13 @@ public class Startup
 
         app.UseStaticFiles();
 
+        app.UseCors("CorsPolicy");
+
         app.UseAuthentication();
 
-        app.UseMvc(routes =>
-        {
-            routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
-        });
+        app.UseAuthorization();
 
+        app.UseMvcWithDefaultRoute();
 
     }
 }
