@@ -5,8 +5,6 @@
 	  <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
 	  <Nullable>enable</Nullable>
 	  <UserSecretsId>0bbdcf74-7ce9-4ebe-8567-38895ae004b4</UserSecretsId>
-	  <ApplicationInsightsResourceId>/subscriptions/477b1c88-96d8-43cf-ad2c-ffd37283394f/resourceGroups/Group/providers/microsoft.insights/components/HeroManagement20230519050249</ApplicationInsightsResourceId>
-
   </PropertyGroup>
 
   <ItemGroup>

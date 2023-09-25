@@ -1,6 +1,4 @@
-
-
-using HeroGallery.Extensions;
+using HeroGallery.Services;
 
 namespace HeroGallery;
 
@@ -25,23 +23,24 @@ public class Startup
         ServiceExtensions.ConfigureIdentity(services);
         ServiceExtensions.ConfigureCors(services);
         ServiceExtensions.ConfigureAuthentication(services, _config);
+        
 
+		services.AddSingleton<IEmailSender, EmailSender>();
+        services.AddSingleton<IEmailService, EmailService>();
         services.AddScoped<IHeroRepository, SqlHeroRepository>();
 
-        
-        services.ConfigureApplicationCookie(options =>
+		services.AddDbContextPool<AppDbContext>(
+			options => options.UseSqlServer(_config.GetConnectionString("HeroDbConnection")));
+
+		services.ConfigureApplicationCookie(options =>
             options.AccessDeniedPath = new PathString("/Adminstration/AccessDenied"));
         
-
-		services.AddTransient<IEmailSender, EmailSender>();
-
         services.Configure<DataProtectionTokenProviderOptions>(options =>
         {
             options.TokenLifespan = TimeSpan.FromHours(5);
         });
 
 
-        
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP reqsuest pipeline.

@@ -21,9 +21,7 @@
             return View();
         }
 
-
         [HttpGet]
-
         public IActionResult UsersList(int? page)
         {
             int pageSize = 3;
@@ -45,16 +43,12 @@
 
             return View(pagination);
         }
-
         
-
-
         [HttpGet]
         public IActionResult CreateRole()
         {
             return View();
         }
-
 
         [HttpPost]
         public async Task<IActionResult> CreateRole(CreateRoleViewModel model)
@@ -114,6 +108,7 @@
             model.Users = model.Users.OrderBy(r => r).ToList();
             return View(model);
         }
+
         [HttpPost]
         public async Task<IActionResult> EditRole(EditRoleViewModel model)
         {
@@ -143,8 +138,6 @@
 
             return View(model);
         }
-
-
 
         [HttpGet]
         public async Task<IActionResult> EditUsersInRole(string roleId)
@@ -194,7 +187,7 @@
             for (int i = 0; i < model.Count; ++i)
             {
                 var user = await userManager.FindByIdAsync(model[i].UserId);
-                IdentityResult result = null;
+                IdentityResult? result = null;
 
                 if (model[i].IsSelected && !await userManager.IsInRoleAsync(user, role.Name))
                 {
@@ -459,6 +452,7 @@
 
                 model.Claims.Add(userClaim);
             }
+
             model.Claims = model.Claims.OrderBy(c => c.ClaimType).ToList();
             return View(model);
 

@@ -1,25 +1,27 @@
-﻿namespace HeroGallery.Controllers;
+﻿using HeroGallery.Services;
+
+namespace HeroGallery.Controllers;
 
 public class AccountController : Controller
 {
     private readonly UserManager<ApplicationUser> userManager;
     private readonly SignInManager<ApplicationUser> signInManager;
     private readonly ILogger<AccountController> logger;
-    private readonly IEmailSender emailSender;
+    private readonly IEmailService emailService;
     private readonly RoleManager<IdentityRole> roleManager;
 
-    public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager,
-        ILogger<AccountController> logger, IEmailSender emailSender, RoleManager<IdentityRole> roleManager)
-    {
-        this.userManager = userManager;
-        this.signInManager = signInManager;
-        this.logger = logger;
-        this.emailSender = emailSender;
-        this.roleManager = roleManager;
-    }
+	public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager,
+		ILogger<AccountController> logger, RoleManager<IdentityRole> roleManager, IEmailService emailService)
+	{
+		this.userManager = userManager;
+		this.signInManager = signInManager;
+		this.logger = logger;
+		this.roleManager = roleManager;
+		this.emailService = emailService;
+	}
 
 
-    [HttpPost]
+	[HttpPost]
     public async Task<IActionResult> Logout()
     {
         await signInManager.SignOutAsync();
@@ -97,15 +99,7 @@ public class AccountController : Controller
                 var confirmationLink = Url.Action("ConfirmEmail", "Account",
                     new { userId = user.Id, token = emailConfirmationToken }, Request.Scheme);
 
-                var subject = "Confirming Your Email Address";
-
-                var message = $"Dear {user.UserName},\r\n\r\n" +
-                    $"Thank you for signing up for our service! " +
-                    $"To complete the registration process, we need to verify your email address. " +
-                    $"Please click the link below to confirm your email:\r\n\r\n{confirmationLink}\r\n\r\n" +
-                    $"If you did not sign up for this service, please ignore this email.\r\n\r\nThank you,";
-
-                await emailSender.SendEmailAsync(user.Email, subject, message);
+                await emailService.SendEmailConfirmationLink(user.UserName, user.Email, confirmationLink);
 
                 await userManager.AddToRoleAsync(user, "User");
 
@@ -244,20 +238,10 @@ public class AccountController : Controller
 
                     var subject = "Confirming Your Email Address";
 
-				var message =   $"<html style=\"padding: 20px;\">" +
-                                $"<body style=\"font-family: Arial, sans-serif;\">" +
-                                $"<p>Dear {info.Principal.FindFirstValue(ClaimTypes.Name)},</p>" +
-                                $"<p>Thank you for signing up for our service! To complete the registration process, we need to verify your email address.</p>" +
-                                $"<p>Please click the link below to confirm your email:</p>" +
-                                $"<p><a href=\"{confirmationLink}\">{confirmationLink}</a></p>" +
-                                $"<p>If you did not sign up for this service, please ignore this email.</p>" +
-                                $"<p>Thank you,</p>" +
-                                $"</body>" +
-                                $"</html>";
+					await emailService.SendEmailConfirmationLink(user.UserName, user.Email, confirmationLink);
 
-				await emailSender.SendEmailAsync(email, subject, message);
 
-                    return View("SuccessfulRegisteration");
+					return View("SuccessfulRegisteration");
                 }
 
                 await userManager.AddLoginAsync(user, info);
@@ -324,19 +308,7 @@ public class AccountController : Controller
                 var passwordResetLink = Url.Action("ResetPassword", "Account",
                     new { email = model.Email, token = token }, Request.Scheme);
 
-                var subject = "Reset Your Password";
- 
-                var message = $"Dear {user.UserName},\r\n\r\n" +
-                    $"We received a request to reset your password. If you did not make this request, please ignore this email.\r\n\r\n" +
-                    $"To reset your password, please click the link below:\r\n\r\n{passwordResetLink}\r\n\r\n" +
-                    $"This link is only valid for the next 24 hours. If you do not reset your password within this time, " +
-                    $"you will need to request another password reset.\r\n\r\n" +
-                    $"If you have any questions or concerns, please contact our support team.\r\n\r\n" +
-                    $"Thank you,";
-
-                logger.Log(LogLevel.Warning, message);
-
-                await emailSender.SendEmailAsync(model.Email, subject, message);
+                await emailService.SendResetPasswordLink(user.UserName, user.Email, passwordResetLink);
 
             }
             return View("ForgotPasswordConfirmation");

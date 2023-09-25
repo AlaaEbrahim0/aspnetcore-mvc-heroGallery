@@ -21,11 +21,15 @@ public static class ServiceExtensions
 		services.AddAuthorization(options =>
 		{
 			options.AddPolicy("DeleteRolePolicy",
-				policy => policy.RequireClaim("Delete Role", "true"));
-
+				policy => policy
+					.RequireClaim("Delete Role", "true"));
 
 			options.AddPolicy("AdminRolePolicy",
 				policy => policy.RequireRole("Admin"));
+
+			options.AddPolicy("EditRolePolicy",
+				policy => policy
+					.RequireClaim("Edit Role", "true"));
 
 		});
 	}
@@ -42,6 +46,7 @@ public static class ServiceExtensions
 				.AddEntityFrameworkStores<AppDbContext>()
 				.AddDefaultTokenProviders();
 	}
+
 	public static void ConfigureAuthentication(IServiceCollection services, IConfiguration _config)
 	{
 		services.AddAuthentication()
@@ -50,8 +55,7 @@ public static class ServiceExtensions
 			  options.ClientId = _config["GoogleClientId"];
 			  options.ClientSecret = _config["GoogleClientSecret"];
 		  });
-		services.AddDbContextPool<AppDbContext>(
-			options => options.UseSqlServer(_config.GetConnectionString("HeroDbConnection")));
+		
 				
 	}
 	public static void ConfigureMvc(IServiceCollection services, IConfiguration _config)
