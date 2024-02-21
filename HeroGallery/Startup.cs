@@ -18,23 +18,22 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
 
-        ServiceExtensions.ConfigureMvc(services, _config);
-        ServiceExtensions.ConfigureAuthorization(services);
-        ServiceExtensions.ConfigureIdentity(services);
-        ServiceExtensions.ConfigureCors(services);
-        ServiceExtensions.ConfigureAuthentication(services, _config);
-        
+        services.ConfigureMvc(_config);
+        services.ConfigureMvc(_config);
+        services.ConfigureIdentity();
+        services.ConfigureAuthentication(_config);
+        services.ConfigureAuthorization();
 
-		services.AddSingleton<IEmailSender, EmailSender>();
+        services.AddSingleton<IEmailSender, EmailSender>();
         services.AddSingleton<IEmailService, EmailService>();
         services.AddScoped<IHeroRepository, SqlHeroRepository>();
 
-		services.AddDbContextPool<AppDbContext>(
-			options => options.UseSqlServer(_config.GetConnectionString("HeroDbConnection")));
+        services.AddDbContextPool<AppDbContext>(
+            options => options.UseSqlServer(_config.GetConnectionString("HeroDbProdConnection")));
 
-		services.ConfigureApplicationCookie(options =>
+        services.ConfigureApplicationCookie(options =>
             options.AccessDeniedPath = new PathString("/Adminstration/AccessDenied"));
-        
+
         services.Configure<DataProtectionTokenProviderOptions>(options =>
         {
             options.TokenLifespan = TimeSpan.FromHours(5);
@@ -48,7 +47,7 @@ public class Startup
     {
         if (env.IsDevelopment())
             app.UseDeveloperExceptionPage();
-        
+
         else
             app.UseHsts();
 

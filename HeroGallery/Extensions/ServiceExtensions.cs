@@ -2,7 +2,7 @@
 
 public static class ServiceExtensions
 {
-	public static void ConfigureCors(IServiceCollection services)
+	public static void ConfigureCors(this IServiceCollection services)
 	{
 		services.AddCors(options =>
 		{
@@ -16,7 +16,7 @@ public static class ServiceExtensions
 
 		});
 	}
-	public static void ConfigureAuthorization(IServiceCollection services)
+	public static void ConfigureAuthorization(this IServiceCollection services)
 	{
 		services.AddAuthorization(options =>
 		{
@@ -33,7 +33,7 @@ public static class ServiceExtensions
 
 		});
 	}
-	public static void ConfigureIdentity(IServiceCollection services)
+	public static void ConfigureIdentity(this IServiceCollection services)
 	{
 		services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 		{
@@ -47,7 +47,7 @@ public static class ServiceExtensions
 				.AddDefaultTokenProviders();
 	}
 
-	public static void ConfigureAuthentication(IServiceCollection services, IConfiguration _config)
+	public static void ConfigureAuthentication(this IServiceCollection services, IConfiguration _config)
 	{
 		services.AddAuthentication()
 		  .AddGoogle(options =>
@@ -58,7 +58,7 @@ public static class ServiceExtensions
 		
 				
 	}
-	public static void ConfigureMvc(IServiceCollection services, IConfiguration _config)
+	public static void ConfigureMvc(this IServiceCollection services, IConfiguration _config)
 	{
 		services.AddMvc(options =>
 		{
