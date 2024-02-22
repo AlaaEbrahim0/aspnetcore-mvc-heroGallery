@@ -5,6 +5,8 @@
 	  <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
 	  <Nullable>enable</Nullable>
 	  <UserSecretsId>0bbdcf74-7ce9-4ebe-8567-38895ae004b4</UserSecretsId>
+	  <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+	  <DockerfileContext>.</DockerfileContext>
   </PropertyGroup>
 
   <ItemGroup>
@@ -27,6 +29,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
   </ItemGroup>
 
 </Project>

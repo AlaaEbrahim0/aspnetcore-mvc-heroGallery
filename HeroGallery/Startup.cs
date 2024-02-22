@@ -29,7 +29,7 @@ public class Startup
         services.AddScoped<IHeroRepository, SqlHeroRepository>();
 
         services.AddDbContextPool<AppDbContext>(
-            options => options.UseSqlServer(_config.GetConnectionString("HeroDbProdConnection")));
+            options => options.UseSqlServer(_config.GetConnectionString("ProdConnection")));
 
         services.ConfigureApplicationCookie(options =>
             options.AccessDeniedPath = new PathString("/Adminstration/AccessDenied"));

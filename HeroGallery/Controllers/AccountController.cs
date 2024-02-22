@@ -10,18 +10,18 @@ public class AccountController : Controller
     private readonly IEmailService emailService;
     private readonly RoleManager<IdentityRole> roleManager;
 
-	public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager,
-		ILogger<AccountController> logger, RoleManager<IdentityRole> roleManager, IEmailService emailService)
-	{
-		this.userManager = userManager;
-		this.signInManager = signInManager;
-		this.logger = logger;
-		this.roleManager = roleManager;
-		this.emailService = emailService;
-	}
+    public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager,
+        ILogger<AccountController> logger, RoleManager<IdentityRole> roleManager, IEmailService emailService)
+    {
+        this.userManager = userManager;
+        this.signInManager = signInManager;
+        this.logger = logger;
+        this.roleManager = roleManager;
+        this.emailService = emailService;
+    }
 
 
-	[HttpPost]
+    [HttpPost]
     public async Task<IActionResult> Logout()
     {
         await signInManager.SignOutAsync();
@@ -78,7 +78,7 @@ public class AccountController : Controller
 
     [HttpPost]
     [AllowAnonymous]
-    public async Task<IActionResult> Register(RegisterViewModel model)
+    public async Task<IActionResult> Register([FromForm] RegisterViewModel model)
     {
         if (ModelState.IsValid)
         {
@@ -160,7 +160,7 @@ public class AccountController : Controller
         //If the returnUrl is null redirect the user to the home page
         returnUrl ??= Url.Content("~/");
 
-        LoginViewModel model = new ()
+        LoginViewModel model = new()
         {
             ReturnUrl = returnUrl,
             ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList()
@@ -238,10 +238,10 @@ public class AccountController : Controller
 
                     var subject = "Confirming Your Email Address";
 
-					await emailService.SendEmailConfirmationLink(user.UserName, user.Email, confirmationLink);
+                    await emailService.SendEmailConfirmationLink(user.UserName, user.Email, confirmationLink);
 
 
-					return View("SuccessfulRegisteration");
+                    return View("SuccessfulRegisteration");
                 }
 
                 await userManager.AddLoginAsync(user, info);
@@ -283,7 +283,7 @@ public class AccountController : Controller
 
         ViewBag.ErrorMessage = "Email Cannot Be Confirmed";
         return View("ExceptionError");
-           
+
     }
 
     [HttpGet]
