@@ -1,6 +1,7 @@
 Hero Gallery
 ============
-This was the first ASP.NET Core MVC I have built
+This was the first ASP.NET Core MVC I have built and of course it was a mess I literally wrote most of the business logic in the controllers
+I was still unaware of separation of concerns, tight coupling and good design principle but nevertheless it was a very good project for me at that time and I was proud of it
 
 The hero gallery project was built using ASP.NET Core, Entity Framework Core, SQL Server, HTML, CSS, JS, Bootstrap, and jQuery. The purpose of this system is to manage hero data, including personal information, abilities, and power levels.
 
